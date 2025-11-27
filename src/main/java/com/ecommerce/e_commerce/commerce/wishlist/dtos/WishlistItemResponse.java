@@ -1,0 +1,19 @@
+package com.ecommerce.e_commerce.commerce.wishlist.dtos;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+
+@Getter
+@Setter
+@Builder
+public class WishlistItemResponse {
+    private Long productId;
+    private String productName;
+    private Integer maxQuantity;
+    private String image;
+    private Integer quantity;
+    private BigDecimal priceSnapshot;
+}
