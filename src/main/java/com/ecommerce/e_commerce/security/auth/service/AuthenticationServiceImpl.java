@@ -13,7 +13,6 @@ import com.ecommerce.e_commerce.common.exception.ItemNotFoundException;
 import com.ecommerce.e_commerce.common.exception.UnauthorizedException;
 import com.ecommerce.e_commerce.security.auth.enums.RoleEnum;
 import com.ecommerce.e_commerce.user.profile.service.UserService;
-import com.ecommerce.e_commerce.user.profile.service.UserServiceImpl;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;

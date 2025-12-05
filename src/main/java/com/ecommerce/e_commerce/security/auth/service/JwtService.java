@@ -1,45 +1,11 @@
 package com.ecommerce.e_commerce.security.auth.service;
 
-import com.ecommerce.e_commerce.security.auth.model.AuthUser;
-import com.ecommerce.e_commerce.security.auth.repository.AuthUserRepository;
-import com.ecommerce.e_commerce.security.auth.utils.JwtUtils;
-import com.ecommerce.e_commerce.common.exception.ItemNotFoundException;
-import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
-import java.util.Date;
+public interface JwtService {
+    String extractUsername(String token);
 
-import static com.ecommerce.e_commerce.common.utils.Constants.USER_NOT_FOUND;
+    Long extractUserIdFromToken(String token);
 
-@Service
-@RequiredArgsConstructor
-public class JwtService {
-
-    private final AuthUserRepository authUserRepository;
-
-    public String extractUsername(String token) {
-        return JwtUtils.extractClaim(token, Claims::getSubject);
-    }
-
-    public Long extractUserIdFromToken(String token) {
-        String userEmail = extractUsername(token);
-        AuthUser authUser = authUserRepository.findByEmail(userEmail).orElseThrow(() -> new ItemNotFoundException(USER_NOT_FOUND));
-        return authUser.getId();
-    }
-
-    public Date extractExpiration(String token) {
-        return JwtUtils.extractClaim(token, Claims::getExpiration);
-    }
-
-    public Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
+    boolean isTokenValid(String token, UserDetails userDetails);
 }
