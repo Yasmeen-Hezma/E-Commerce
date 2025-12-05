@@ -88,6 +88,7 @@ public class BrandServiceImpl implements BrandService {
         }
     }
 
+    @Override
     public Brand getNonDeletedBrandById(Long id) {
         return brandRepository
                 .findByBrandIdAndDeletedFalse(id)

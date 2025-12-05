@@ -1,10 +1,10 @@
 package com.ecommerce.e_commerce.commerce.product.service;
 
 import com.ecommerce.e_commerce.commerce.brand.model.Brand;
-import com.ecommerce.e_commerce.commerce.brand.service.BrandServiceImpl;
+import com.ecommerce.e_commerce.commerce.brand.service.BrandService;
 import com.ecommerce.e_commerce.commerce.cart.model.CartItem;
 import com.ecommerce.e_commerce.commerce.category.model.Category;
-import com.ecommerce.e_commerce.commerce.category.service.CategoryServiceImpl;
+import com.ecommerce.e_commerce.commerce.category.service.CategoryService;
 import com.ecommerce.e_commerce.common.dto.PaginatedResponse;
 import com.ecommerce.e_commerce.common.exception.DuplicateItemException;
 import com.ecommerce.e_commerce.common.exception.InsufficientStockException;
@@ -36,8 +36,8 @@ import static com.ecommerce.e_commerce.common.utils.Constants.PRODUCT_NOT_FOUND;
 public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final ProductRepository productRepository;
-    private final BrandServiceImpl brandService;
-    private final CategoryServiceImpl categoryService;
+    private final BrandService brandService;
+    private final CategoryService categoryService;
     private final FileStorageService fileService;
 
 

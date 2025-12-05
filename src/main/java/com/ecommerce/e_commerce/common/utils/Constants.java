@@ -10,6 +10,7 @@ public class Constants {
     public static final String EMAIL_IS_NOT_VERIFIED = "Email is not verified";
     public static final String YOU_CAN_ONLY_ACCESS_YOUR_OWN_ORDERS = "You can only access your own orders";
     public static final String YOU_CAN_ONLY_ACCESS_YOUR_OWN_REVIEWS = "You can only access your own reviews";
+    public static final String ROLE_NOT_FOUND = "Role not found";
 
     // Resource Not Found
     public static final String ITEM_NOT_FOUND = "Item not found";
@@ -56,8 +57,11 @@ public class Constants {
     // OTP / Password Reset
     public static final String OTP_EXPIRED = "OTP expired";
     public static final String INVALID_OTP = "Invalid OTP";
+    public static final String OTP_NOT_FOUND_FOR_THIS_EMAIL = "Otp not found for this email";
     public static final String IF_AN_ACCOUNT_EXISTS_A_PASSWORD_RESET_OTP_HAS_BEEN_SENT = "If an account exists, a password reset OTP has been sent";
     public static final String PASSWORD_HAS_BEEN_RESET_SUCCESSFULLY = "Password has been reset successfully";
+    public static final String CURRENT_PASSWORD_IS_INCORRECT = "Current password is incorrect";
+    public static final String NEW_PASSWORD_MUST_BE_DIFFERENT_FROM_CURRENT_PASSWORD = "New password must be different from current password";
 
     // File Handling
     public static final String FAILED_TO_SAVE_IMAGE = "Failed to save image";

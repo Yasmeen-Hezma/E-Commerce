@@ -24,9 +24,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.ecommerce.e_commerce.common.utils.Constants.CURRENT_PASSWORD_IS_INCORRECT;
+import static com.ecommerce.e_commerce.common.utils.Constants.NEW_PASSWORD_MUST_BE_DIFFERENT_FROM_CURRENT_PASSWORD;
+
 @RequiredArgsConstructor
 @Service
 public class ProfileServiceImpl implements ProfileService {
+
     private final UserService userService;
     private final UserRepository userRepository;
     private final ProfileMapper profileMapper;
@@ -58,10 +62,10 @@ public class ProfileServiceImpl implements ProfileService {
         AuthUser authUser = user.getAuthUser();
 
         if (!passwordEncoder.matches(passwordRequest.getOldPassword(), authUser.getPassword())) {
-            throw new InvalidPasswordException("Current password is incorrect");
+            throw new InvalidPasswordException(CURRENT_PASSWORD_IS_INCORRECT);
         }
         if (passwordRequest.getNewPassword().equals(passwordRequest.getOldPassword())) {
-            throw new InvalidPasswordException("New password must be different from current password");
+            throw new InvalidPasswordException(NEW_PASSWORD_MUST_BE_DIFFERENT_FROM_CURRENT_PASSWORD);
         }
         authUser.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
         authUserRepository.save(authUser);

@@ -21,7 +21,6 @@ import static com.ecommerce.e_commerce.common.utils.Constants.*;
 @Service
 @RequiredArgsConstructor
 public class EmailVerificationServiceImpl implements EmailVerificationService {
-    public static final String OTP_NOT_FOUND_FOR_THIS_EMAIL = "Otp not found for this email";
     public static final int OTP_EXPIRY_MINUTES = 10;
     private final EmailVerificationRepository emailVerificationRepository;
     private final EmailService emailService;

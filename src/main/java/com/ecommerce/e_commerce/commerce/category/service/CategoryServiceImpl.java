@@ -87,6 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Override
     public Category getNonDeletedCategoryById(Long id) {
         return categoryRepository
                 .findByCategoryIdAndDeletedFalse(id)

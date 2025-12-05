@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
     private Role getRoleByEnum(RoleEnum roleEnum) {
         return roleRepository
                 .findByRoleEnum(roleEnum)
-                .orElseThrow(() -> new ItemNotFoundException("Role not found"));
+                .orElseThrow(() -> new ItemNotFoundException(ROLE_NOT_FOUND));
     }
 
     private User buildCustomerUser(CustomerRegistrationRequest customer) {
