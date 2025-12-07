@@ -10,10 +10,10 @@ import java.time.Instant;
 @Getter
 @Builder
 public class ReviewResponse {
-    private Integer reviewId;
-    private Integer productId;
+    private Long reviewId;
+    private Long productId;
     private String productName;
-    private Integer userId;
+    private Long userId;
     private String userName;
     private Integer rating;
     private String title;

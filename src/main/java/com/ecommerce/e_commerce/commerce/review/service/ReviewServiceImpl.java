@@ -39,7 +39,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public ReviewResponse createReview(Long productId, ReviewRequest reviewRequest, HttpServletRequest request) {
-        productService.getNonDeletedProductById(productId);
         User user = userService.getUserByRequest(request);
         Product product = productService.getNonDeletedProductById(productId);
 
@@ -114,7 +113,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Transactional
-    public void updateProductReviewStats(Long productId) {
+    void updateProductReviewStats(Long productId) {
         BigDecimal averageRating = reviewRepository.calculateAverageRating(productId)
                 .orElse(BigDecimal.ZERO)
                 .setScale(2, RoundingMode.HALF_UP);
