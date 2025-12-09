@@ -130,8 +130,8 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ItemNotFoundException(PRODUCT_NOT_FOUND));
     }
 
-    @Override
-    public StockWarningType evaluateStock(Product product, int requested) {
+    //@Override
+    private StockWarningType evaluateStock(Product product, int requested) {
         Integer available = product.getQuantity();
         if (product.getStatus() == ProductStatus.DISCONTINUED) return StockWarningType.DISCONTINUED;
         if (available == 0) return StockWarningType.OUT_OF_STOCK;
@@ -139,6 +139,7 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+    @Override
     public Optional<StockWarning> checkStockAndWarn(Product product, int requested) {
         StockWarningType warningType = evaluateStock(product, requested);
         if (warningType != null) {

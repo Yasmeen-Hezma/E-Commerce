@@ -12,7 +12,6 @@ import com.ecommerce.e_commerce.commerce.cart.model.CartItemId;
 import com.ecommerce.e_commerce.commerce.cart.repository.CartItemRepository;
 import com.ecommerce.e_commerce.commerce.cart.repository.CartRepository;
 import com.ecommerce.e_commerce.common.exception.EmptyCartException;
-import com.ecommerce.e_commerce.common.exception.ItemNotFoundException;
 import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
 import com.ecommerce.e_commerce.commerce.product.model.Product;
 import com.ecommerce.e_commerce.commerce.product.service.ProductService;
@@ -36,7 +35,6 @@ public class CartServiceImpl implements CartService {
     private final CartMapper cartMapper;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
     private final ProductService productService;
     private final CartItemMapper cartItemMapper;
     private final UserService userService;
@@ -132,9 +130,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private Cart getCartByUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new ItemNotFoundException(USER_NOT_FOUND);
-        }
+        userService.getUserById(userId);
         return cartRepository.findByUserId(userId).orElseGet(() -> createAndSaveNewCart(userId));
     }
 

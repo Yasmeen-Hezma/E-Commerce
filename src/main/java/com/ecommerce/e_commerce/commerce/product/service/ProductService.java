@@ -27,8 +27,6 @@ public interface ProductService {
 
     Product getNonDeletedProductById(Long id);
 
-    StockWarningType evaluateStock(Product product, int requested);
-
     Optional<StockWarning> checkStockAndWarn(Product product, int requested);
 
     void checkStockAvailability(List<CartItem> cartItems);
