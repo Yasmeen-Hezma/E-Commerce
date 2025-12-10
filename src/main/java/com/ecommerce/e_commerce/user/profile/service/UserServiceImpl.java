@@ -87,6 +87,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public AuthUser loginUser(LoginRequest loginRequest) {
+        AuthUser authUser = getUserByEmail(loginRequest.getEmail());
+        updateLastLogin(authUser);
+        return authUser;
+    }
+
     private void validateEmailVerification(String email) {
         boolean isVerified = emailVerificationService.isEmailVerified(email);
         if (!isVerified) {
@@ -133,13 +140,6 @@ public class UserServiceImpl implements UserService {
             return buildCustomerUser(customer);
         }
         return buildSellerUser(registerRequest.getSeller());
-    }
-
-    @Override
-    public AuthUser loginUser(LoginRequest loginRequest) {
-        AuthUser authUser = getUserByEmail(loginRequest.getEmail());
-        updateLastLogin(authUser);
-        return authUser;
     }
 
     private void updateLastLogin(AuthUser authUser) {

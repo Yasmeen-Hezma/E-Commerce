@@ -1,6 +1,8 @@
 package com.ecommerce.e_commerce.user.profile.dtos;
 
 import com.ecommerce.e_commerce.commerce.order.enums.OrderStatus;
+import com.ecommerce.e_commerce.commerce.payment.enums.PaymentMethod;
+import com.ecommerce.e_commerce.commerce.payment.enums.PaymentStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,6 @@ public class OrderSummeryResponse {
     private String shippingCity;
     private String shippingGovernorate;
     // payment info
-    private String paymentMethod;
-    private String paymentStatus;
+    private PaymentMethod paymentMethod;
+    private PaymentStatus paymentStatus;
 }
