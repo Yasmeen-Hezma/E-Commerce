@@ -7,6 +7,7 @@ import lombok.*;
 
 @Setter
 @Getter
+@Builder
 public class RegisterRequest {
     @AllowedRoleEnum
     private RoleEnum role;

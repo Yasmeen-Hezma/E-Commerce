@@ -1,5 +1,6 @@
 package com.ecommerce.e_commerce.security.token.service;
 
+import com.ecommerce.e_commerce.common.exception.ItemNotFoundException;
 import com.ecommerce.e_commerce.security.auth.model.Role;
 import com.ecommerce.e_commerce.security.auth.repository.RoleRepository;
 import com.ecommerce.e_commerce.security.auth.utils.JwtUtils;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.ecommerce.e_commerce.common.utils.Constants.ROLE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -79,7 +82,8 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private String generateToken(String email, RoleEnum roleId, long expiration) {
-        Role role = roleRepository.findByRoleEnum(roleId).orElseThrow();
+        Role role = roleRepository.findByRoleEnum(roleId)
+                .orElseThrow(() -> new ItemNotFoundException(ROLE_NOT_FOUND));
         return Jwts.builder()
                 .subject(email)
                 .claim("role", role.getRoleEnum().name())
@@ -88,4 +92,5 @@ public class TokenServiceImpl implements TokenService {
                 .signWith(JwtUtils.getSigningKey())
                 .compact();
     }
+
 }

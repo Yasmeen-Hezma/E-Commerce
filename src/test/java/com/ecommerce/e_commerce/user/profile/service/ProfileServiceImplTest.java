@@ -36,7 +36,6 @@ import static com.ecommerce.e_commerce.common.utils.Constants.USER_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static com.ecommerce.e_commerce.common.utils.Constants.*;
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

@@ -155,8 +155,8 @@ public class UserServiceImpl implements UserService {
 
     private User buildCustomerUser(CustomerRegistrationRequest customer) {
         return User.builder()
-                .firstName(customer.getFirstname())
-                .lastName(customer.getLastname())
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
                 .phoneCode(customer.getPhoneCode())
                 .phone(customer.getPhone())
                 .build();
