@@ -1,5 +1,6 @@
 package com.ecommerce.e_commerce.commerce.order.dto;
 
+import com.ecommerce.e_commerce.commerce.order.enums.OrderStatus;
 import com.ecommerce.e_commerce.commerce.payment.dto.PaymentResponse;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class OrderResponse {
     private Long id;
     private Long userId;
     private List<OrderItemResponse> items;
-    private String status;
+    private OrderStatus status;
     private BigDecimal totalPrice;
     private Instant createdAt;
     private PaymentResponse payment;

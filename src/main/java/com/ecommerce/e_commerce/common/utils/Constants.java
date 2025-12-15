@@ -13,7 +13,6 @@ public class Constants {
     public static final String ROLE_NOT_FOUND = "Role not found";
 
     // Resource Not Found
-    public static final String ITEM_NOT_FOUND = "Item not found";
     public static final String CATEGORY_NOT_FOUND = "Category not found";
     public static final String BRAND_NOT_FOUND = "Brand not found";
     public static final String PRODUCT_NOT_FOUND = "Product not found";

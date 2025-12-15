@@ -57,7 +57,7 @@ public class BrandServiceImpl implements BrandService {
     public BrandResponse updateBrand(Long brandId, BrandRequest request) {
         Brand brand = brandRepository
                 .findByBrandIdAndDeletedFalse(brandId)
-                .orElseThrow(() -> new ItemNotFoundException(ITEM_NOT_FOUND));
+                .orElseThrow(() -> new ItemNotFoundException(BRAND_NOT_FOUND));
         checkDuplicateBrandName(request.getName(), brandId);
         if (request.getImage() != null && !request.getImage().isEmpty()) {
             if (brand.getImage() != null) {
