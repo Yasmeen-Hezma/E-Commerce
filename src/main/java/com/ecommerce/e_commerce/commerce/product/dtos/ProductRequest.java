@@ -2,6 +2,7 @@ package com.ecommerce.e_commerce.commerce.product.dtos;
 
 import com.ecommerce.e_commerce.common.validation.ValidFile;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 
 @Setter
 @Getter
+@Builder
 public class ProductRequest {
     @NotBlank
     @Size(min = 3, message = "Product name must contain at least 3 characters")

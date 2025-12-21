@@ -57,7 +57,6 @@ class AuthenticationServiceImplTest {
     private RegisterRequest registerRequest;
     private LoginRequest loginRequest;
     private AuthUser authUser;
-    private Role customerRole;
     private EmailRequest emailRequest;
     private ResetPasswordRequest resetPasswordRequest;
     private final String email = "user@email.com";
@@ -66,7 +65,7 @@ class AuthenticationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        customerRole = Role
+        Role customerRole = Role
                 .builder()
                 .roleId(1L)
                 .roleEnum(RoleEnum.CUSTOMER)

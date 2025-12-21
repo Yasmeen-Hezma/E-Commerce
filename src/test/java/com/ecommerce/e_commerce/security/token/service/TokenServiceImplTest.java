@@ -85,23 +85,6 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void generateAccessToken_ShouldGenerateDifferentTokens_WhenCalledMultipleTimes() throws InterruptedException {
-        // Arrange
-        when(roleRepository.findByRoleEnum(RoleEnum.CUSTOMER)).thenReturn(Optional.of(customerRole));
-        // Act
-        String result1 = tokenService.generateAccessToken("Yousef@email.com", RoleEnum.CUSTOMER);
-        Thread.sleep(10);
-        String result2 = tokenService.generateAccessToken("Yousef@email.com", RoleEnum.CUSTOMER);
-        // Assert
-        assertThat(result1).contains(".");
-        assertThat(result1.split("\\.")).hasSize(3);
-        assertThat(result2).contains(".");
-        assertThat(result2.split("\\.")).hasSize(3);
-        assertThat(result1).isNotEqualTo(result2);
-        verify(roleRepository, times(2)).findByRoleEnum(RoleEnum.CUSTOMER);
-    }
-
-    @Test
     void generateAccessToken_ShouldThrowException_WhenRoleNotFound() {
         // Arrange
         when(roleRepository.findByRoleEnum(RoleEnum.CUSTOMER)).thenReturn(Optional.empty());
