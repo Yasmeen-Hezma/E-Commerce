@@ -1,6 +1,6 @@
 package com.ecommerce.e_commerce.common.exception;
 
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import lombok.Getter;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.ecommerce.e_commerce.commerce.cart.dtos;
+package com.ecommerce.e_commerce.commerce.wishlist.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder
-public class CartItemResponse {
+public class WishlistItemResponse {
     private Long productId;
     private String productName;
     private Integer maxQuantity;

@@ -1,8 +1,8 @@
 package com.ecommerce.e_commerce.commerce.product.controller;
 
 import com.ecommerce.e_commerce.common.dto.PaginatedResponse;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductRequest;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductResponse;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductRequest;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductResponse;
 import com.ecommerce.e_commerce.commerce.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

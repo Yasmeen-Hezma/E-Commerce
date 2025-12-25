@@ -1,4 +1,4 @@
-package com.ecommerce.e_commerce.user.profile.dtos;
+package com.ecommerce.e_commerce.user.profile.dto;
 
 import lombok.*;
 

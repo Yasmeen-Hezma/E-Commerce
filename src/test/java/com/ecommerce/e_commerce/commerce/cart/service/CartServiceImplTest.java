@@ -1,9 +1,9 @@
 package com.ecommerce.e_commerce.commerce.cart.service;
 
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartItemRequest;
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartItemResponse;
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartResponse;
-import com.ecommerce.e_commerce.commerce.cart.dtos.UpdateCartItemRequest;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartItemRequest;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartItemResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.UpdateCartItemRequest;
 import com.ecommerce.e_commerce.commerce.cart.mapper.CartItemMapper;
 import com.ecommerce.e_commerce.commerce.cart.mapper.CartMapper;
 import com.ecommerce.e_commerce.commerce.cart.model.Cart;
@@ -11,7 +11,7 @@ import com.ecommerce.e_commerce.commerce.cart.model.CartItem;
 import com.ecommerce.e_commerce.commerce.cart.model.CartItemId;
 import com.ecommerce.e_commerce.commerce.cart.repository.CartItemRepository;
 import com.ecommerce.e_commerce.commerce.cart.repository.CartRepository;
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import com.ecommerce.e_commerce.commerce.product.enums.StockWarningType;
 import com.ecommerce.e_commerce.commerce.product.model.Product;
 import com.ecommerce.e_commerce.commerce.product.service.ProductService;
@@ -452,5 +452,26 @@ class CartServiceImplTest {
         assertThatThrownBy(() -> cartService.checkCartExisting(cart))
                 .isInstanceOf(EmptyCartException.class)
                 .hasMessageContaining(CART_IS_EMPTY);
+    }
+
+    @Test
+    void getOrCreateCart_ShouldCreateNewCart_WhenCartDoesNotExist() {
+        // Arrange
+        when(cartRepository.findByUserId(1L)).thenReturn(Optional.empty());
+        when(userService.getUserById(1L)).thenReturn(user);
+        when(cartRepository.save(any(Cart.class))).thenReturn(cart);
+        when(userService.getUserId(httpRequest)).thenReturn(1L);
+        when(productService.getNonDeletedProductById(100L)).thenReturn(product);
+        when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem);
+        when(cartItemMapper.toResponse(any(CartItem.class))).thenReturn(cartItemResponse);
+        // Act
+        cartService.addItemToCart(httpRequest, cartItemRequest);
+        // Assert
+        verify(userService).getUserById(1L);
+        verify(cartRepository, times(2)).save(any(Cart.class));
+        verify(userService).getUserId(httpRequest);
+        verify(productService).getNonDeletedProductById(100L);
+        verify(cartItemRepository).save(any(CartItem.class));
+        verify(cartItemMapper).toResponse(any(CartItem.class));
     }
 }

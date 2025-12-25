@@ -1,9 +1,9 @@
 package com.ecommerce.e_commerce.commerce.cart.service;
 
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartItemRequest;
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartItemResponse;
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartResponse;
-import com.ecommerce.e_commerce.commerce.cart.dtos.UpdateCartItemRequest;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartItemRequest;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartItemResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.UpdateCartItemRequest;
 import com.ecommerce.e_commerce.commerce.cart.model.Cart;
 import jakarta.servlet.http.HttpServletRequest;
 

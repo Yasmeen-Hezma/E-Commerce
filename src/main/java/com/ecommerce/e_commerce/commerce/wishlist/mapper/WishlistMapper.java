@@ -1,7 +1,7 @@
 package com.ecommerce.e_commerce.commerce.wishlist.mapper;
 
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistResponse;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistResponse;
 import com.ecommerce.e_commerce.commerce.wishlist.model.Wishlist;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,13 +1,13 @@
 package com.ecommerce.e_commerce.commerce.wishlist.service;
 
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import com.ecommerce.e_commerce.commerce.product.enums.StockWarningType;
 import com.ecommerce.e_commerce.commerce.product.model.Product;
 import com.ecommerce.e_commerce.commerce.product.service.ProductService;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.UpdateWishlistItemRequest;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistItemRequest;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistItemResponse;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistResponse;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.UpdateWishlistItemRequest;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistItemRequest;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistItemResponse;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistResponse;
 import com.ecommerce.e_commerce.commerce.wishlist.mapper.WishlistItemMapper;
 import com.ecommerce.e_commerce.commerce.wishlist.mapper.WishlistMapper;
 import com.ecommerce.e_commerce.commerce.wishlist.model.Wishlist;

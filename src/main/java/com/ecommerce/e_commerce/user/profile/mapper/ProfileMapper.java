@@ -1,8 +1,8 @@
 package com.ecommerce.e_commerce.user.profile.mapper;
 
 import com.ecommerce.e_commerce.user.profile.model.User;
-import com.ecommerce.e_commerce.user.profile.dtos.ProfileResponse;
-import com.ecommerce.e_commerce.user.profile.dtos.UpdateProfileRequest;
+import com.ecommerce.e_commerce.user.profile.dto.ProfileResponse;
+import com.ecommerce.e_commerce.user.profile.dto.UpdateProfileRequest;
 import org.mapstruct.*;
 
 @Mapper(

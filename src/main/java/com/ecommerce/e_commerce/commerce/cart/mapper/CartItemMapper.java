@@ -1,6 +1,6 @@
 package com.ecommerce.e_commerce.commerce.cart.mapper;
 
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartItemResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartItemResponse;
 import com.ecommerce.e_commerce.commerce.cart.model.CartItem;
 import com.ecommerce.e_commerce.common.utils.MapperUtil;
 import org.mapstruct.Mapper;

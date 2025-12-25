@@ -1,7 +1,7 @@
-package com.ecommerce.e_commerce.commerce.cart.dtos;
+package com.ecommerce.e_commerce.commerce.cart.dto;
 
 
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

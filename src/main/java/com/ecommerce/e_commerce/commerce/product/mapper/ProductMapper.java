@@ -3,8 +3,8 @@ package com.ecommerce.e_commerce.commerce.product.mapper;
 import com.ecommerce.e_commerce.commerce.brand.model.Brand;
 import com.ecommerce.e_commerce.commerce.category.model.Category;
 import com.ecommerce.e_commerce.common.utils.MapperUtil;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductRequest;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductResponse;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductRequest;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductResponse;
 import com.ecommerce.e_commerce.commerce.product.model.Product;
 import org.mapstruct.*;
 

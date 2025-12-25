@@ -1,9 +1,9 @@
 package com.ecommerce.e_commerce.commerce.wishlist.service;
 
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.UpdateWishlistItemRequest;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistItemRequest;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistItemResponse;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistResponse;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.UpdateWishlistItemRequest;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistItemRequest;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistItemResponse;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface WishlistService {

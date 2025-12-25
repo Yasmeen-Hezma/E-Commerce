@@ -1,6 +1,6 @@
-package com.ecommerce.e_commerce.commerce.wishlist.dtos;
+package com.ecommerce.e_commerce.commerce.wishlist.dto;
 
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

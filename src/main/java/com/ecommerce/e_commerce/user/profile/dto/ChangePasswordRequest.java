@@ -1,4 +1,4 @@
-package com.ecommerce.e_commerce.user.profile.dtos;
+package com.ecommerce.e_commerce.user.profile.dto;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;

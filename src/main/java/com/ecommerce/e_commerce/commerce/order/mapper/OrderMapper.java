@@ -6,7 +6,7 @@ import com.ecommerce.e_commerce.commerce.order.model.Order;
 import com.ecommerce.e_commerce.commerce.order.model.OrderItem;
 import com.ecommerce.e_commerce.commerce.payment.dto.PaymentResponse;
 import com.ecommerce.e_commerce.commerce.payment.model.PaymentTransaction;
-import com.ecommerce.e_commerce.user.profile.dtos.OrderSummeryResponse;
+import com.ecommerce.e_commerce.user.profile.dto.OrderSummeryResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,14 +1,14 @@
-package com.ecommerce.e_commerce.commerce.brand.dtos;
+package com.ecommerce.e_commerce.commerce.category.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Builder
-public class BrandResponse {
-    private long id;
+public class CategoryResponse {
+    private Long id;
     private String name;
     private String image;
 }

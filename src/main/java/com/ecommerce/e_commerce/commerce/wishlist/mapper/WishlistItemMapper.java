@@ -1,7 +1,7 @@
 package com.ecommerce.e_commerce.commerce.wishlist.mapper;
 
 import com.ecommerce.e_commerce.common.utils.MapperUtil;
-import com.ecommerce.e_commerce.commerce.wishlist.dtos.WishlistItemResponse;
+import com.ecommerce.e_commerce.commerce.wishlist.dto.WishlistItemResponse;
 import com.ecommerce.e_commerce.commerce.wishlist.model.WishlistItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

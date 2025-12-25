@@ -1,4 +1,4 @@
-package com.ecommerce.e_commerce.commerce.cart.dtos;
+package com.ecommerce.e_commerce.commerce.cart.dto;
 
 import lombok.Getter;
 import lombok.Setter;

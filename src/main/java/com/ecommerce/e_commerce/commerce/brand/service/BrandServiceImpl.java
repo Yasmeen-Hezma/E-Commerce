@@ -1,7 +1,7 @@
 package com.ecommerce.e_commerce.commerce.brand.service;
 
-import com.ecommerce.e_commerce.commerce.brand.dtos.BrandRequest;
-import com.ecommerce.e_commerce.commerce.brand.dtos.BrandResponse;
+import com.ecommerce.e_commerce.commerce.brand.dto.BrandRequest;
+import com.ecommerce.e_commerce.commerce.brand.dto.BrandResponse;
 import com.ecommerce.e_commerce.commerce.brand.mapper.BrandMapper;
 import com.ecommerce.e_commerce.commerce.brand.model.Brand;
 import com.ecommerce.e_commerce.commerce.brand.repository.BrandRepository;

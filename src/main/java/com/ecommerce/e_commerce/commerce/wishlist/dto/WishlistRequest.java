@@ -1,4 +1,4 @@
-package com.ecommerce.e_commerce.commerce.wishlist.dtos;
+package com.ecommerce.e_commerce.commerce.wishlist.dto;
 
 import lombok.Getter;
 import lombok.Setter;

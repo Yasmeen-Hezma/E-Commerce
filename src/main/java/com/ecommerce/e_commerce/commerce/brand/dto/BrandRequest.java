@@ -1,4 +1,4 @@
-package com.ecommerce.e_commerce.commerce.category.dtos;
+package com.ecommerce.e_commerce.commerce.brand.dto;
 
 import com.ecommerce.e_commerce.common.validation.ValidFile;
 import jakarta.validation.constraints.NotBlank;
@@ -8,12 +8,11 @@ import lombok.Setter;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-
-@Getter
 @Setter
-public class CategoryRequest {
+@Getter
+public class BrandRequest {
     @NotBlank
-    @Size(min = 3, message = "Category name must contain at least 3 characters")
+    @Size(min = 3, message = "Brand name must contain at least 3 characters")
     private String name;
     @ValidFile(
             allowedTypes = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE},

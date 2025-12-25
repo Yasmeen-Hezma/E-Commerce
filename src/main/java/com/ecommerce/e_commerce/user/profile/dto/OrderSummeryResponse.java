@@ -1,4 +1,4 @@
-package com.ecommerce.e_commerce.user.profile.dtos;
+package com.ecommerce.e_commerce.user.profile.dto;
 
 import com.ecommerce.e_commerce.commerce.order.enums.OrderStatus;
 import com.ecommerce.e_commerce.commerce.payment.enums.PaymentMethod;

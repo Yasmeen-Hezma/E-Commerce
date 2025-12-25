@@ -1,9 +1,9 @@
 package com.ecommerce.e_commerce.commerce.cart.service;
 
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartItemRequest;
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartItemResponse;
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartResponse;
-import com.ecommerce.e_commerce.commerce.cart.dtos.UpdateCartItemRequest;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartItemRequest;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartItemResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.UpdateCartItemRequest;
 import com.ecommerce.e_commerce.commerce.cart.mapper.CartItemMapper;
 import com.ecommerce.e_commerce.commerce.cart.mapper.CartMapper;
 import com.ecommerce.e_commerce.commerce.cart.model.Cart;
@@ -12,11 +12,10 @@ import com.ecommerce.e_commerce.commerce.cart.model.CartItemId;
 import com.ecommerce.e_commerce.commerce.cart.repository.CartItemRepository;
 import com.ecommerce.e_commerce.commerce.cart.repository.CartRepository;
 import com.ecommerce.e_commerce.common.exception.EmptyCartException;
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import com.ecommerce.e_commerce.commerce.product.model.Product;
 import com.ecommerce.e_commerce.commerce.product.service.ProductService;
 import com.ecommerce.e_commerce.user.profile.model.User;
-import com.ecommerce.e_commerce.user.profile.repository.UserRepository;
 import com.ecommerce.e_commerce.user.profile.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -27,7 +26,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ecommerce.e_commerce.common.utils.Constants.CART_IS_EMPTY;
-import static com.ecommerce.e_commerce.common.utils.Constants.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

@@ -2,11 +2,12 @@ package com.ecommerce.e_commerce.commerce.product.service;
 
 import com.ecommerce.e_commerce.commerce.brand.model.Brand;
 import com.ecommerce.e_commerce.commerce.brand.service.BrandService;
+import com.ecommerce.e_commerce.commerce.cart.model.CartItem;
 import com.ecommerce.e_commerce.commerce.category.model.Category;
 import com.ecommerce.e_commerce.commerce.category.service.CategoryService;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductRequest;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductResponse;
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductRequest;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductResponse;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import com.ecommerce.e_commerce.commerce.product.enums.ProductStatus;
 import com.ecommerce.e_commerce.commerce.product.enums.StockWarningType;
 import com.ecommerce.e_commerce.commerce.product.mapper.ProductMapper;
@@ -14,6 +15,7 @@ import com.ecommerce.e_commerce.commerce.product.model.Product;
 import com.ecommerce.e_commerce.commerce.product.repository.ProductRepository;
 import com.ecommerce.e_commerce.common.dto.PaginatedResponse;
 import com.ecommerce.e_commerce.common.exception.DuplicateItemException;
+import com.ecommerce.e_commerce.common.exception.InsufficientStockException;
 import com.ecommerce.e_commerce.common.exception.ItemNotFoundException;
 import com.ecommerce.e_commerce.common.service.FileStorageService;
 import org.junit.jupiter.api.BeforeEach;
@@ -435,5 +437,17 @@ class ProductServiceImplTest {
         assertThat(result.get().getProductName()).isEqualTo("Running Shoes");
     }
 
+    @Test
+    void checkStockAvailability_ShouldThrowException_WhenInsufficientStock() {
+        // Arrange
+        CartItem cartItem = CartItem.builder()
+                .product(product)
+                .quantity(60) // more than existing
+                .build();
+
+        // Act & Assert
+        assertThatThrownBy(() -> productService.checkStockAvailability(List.of(cartItem)))
+                .isInstanceOf(InsufficientStockException.class);
+    }
 }
 

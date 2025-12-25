@@ -2,10 +2,9 @@ package com.ecommerce.e_commerce.commerce.product.service;
 
 import com.ecommerce.e_commerce.commerce.cart.model.CartItem;
 import com.ecommerce.e_commerce.common.dto.PaginatedResponse;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductRequest;
-import com.ecommerce.e_commerce.commerce.product.dtos.ProductResponse;
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
-import com.ecommerce.e_commerce.commerce.product.enums.StockWarningType;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductRequest;
+import com.ecommerce.e_commerce.commerce.product.dto.ProductResponse;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import com.ecommerce.e_commerce.commerce.product.model.Product;
 import org.springframework.data.domain.Pageable;
 

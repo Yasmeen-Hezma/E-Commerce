@@ -1,7 +1,7 @@
 package com.ecommerce.e_commerce.commerce.category.mapper;
 
-import com.ecommerce.e_commerce.commerce.category.dtos.CategoryRequest;
-import com.ecommerce.e_commerce.commerce.category.dtos.CategoryResponse;
+import com.ecommerce.e_commerce.commerce.category.dto.CategoryRequest;
+import com.ecommerce.e_commerce.commerce.category.dto.CategoryResponse;
 import com.ecommerce.e_commerce.commerce.category.model.Category;
 import com.ecommerce.e_commerce.common.utils.MapperUtil;
 import org.mapstruct.Mapper;

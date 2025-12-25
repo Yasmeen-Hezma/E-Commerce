@@ -1,7 +1,7 @@
 package com.ecommerce.e_commerce.commerce.brand.mapper;
 
-import com.ecommerce.e_commerce.commerce.brand.dtos.BrandRequest;
-import com.ecommerce.e_commerce.commerce.brand.dtos.BrandResponse;
+import com.ecommerce.e_commerce.commerce.brand.dto.BrandRequest;
+import com.ecommerce.e_commerce.commerce.brand.dto.BrandResponse;
 import com.ecommerce.e_commerce.commerce.brand.model.Brand;
 import com.ecommerce.e_commerce.common.utils.MapperUtil;
 import org.mapstruct.Mapper;

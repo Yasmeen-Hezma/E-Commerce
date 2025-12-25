@@ -1,8 +1,8 @@
 package com.ecommerce.e_commerce.commerce.cart.mapper;
 
-import com.ecommerce.e_commerce.commerce.cart.dtos.CartResponse;
+import com.ecommerce.e_commerce.commerce.cart.dto.CartResponse;
 import com.ecommerce.e_commerce.commerce.cart.model.Cart;
-import com.ecommerce.e_commerce.commerce.product.dtos.StockWarning;
+import com.ecommerce.e_commerce.commerce.product.dto.StockWarning;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;

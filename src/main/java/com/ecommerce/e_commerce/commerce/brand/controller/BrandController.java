@@ -1,7 +1,7 @@
 package com.ecommerce.e_commerce.commerce.brand.controller;
 
-import com.ecommerce.e_commerce.commerce.brand.dtos.BrandRequest;
-import com.ecommerce.e_commerce.commerce.brand.dtos.BrandResponse;
+import com.ecommerce.e_commerce.commerce.brand.dto.BrandRequest;
+import com.ecommerce.e_commerce.commerce.brand.dto.BrandResponse;
 import com.ecommerce.e_commerce.commerce.brand.service.BrandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
