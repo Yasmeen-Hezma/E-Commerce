@@ -20,6 +20,11 @@ public final class EndpointGroups {
     public static final String[] PUBLIC_ENDPOINTS = {
             "/auth/**",
             "/uploads/**",
+            "/api-docs/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
             API_ORDER_PAYPAL_SUCCESS,
             API_ORDER_PAYPAL_CANCEL
     };
