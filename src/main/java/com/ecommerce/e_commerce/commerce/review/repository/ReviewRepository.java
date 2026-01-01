@@ -18,7 +18,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Optional<Review> findByReviewIdAndDeletedFalse(Long reviewId);
 
-    boolean existsByProduct_ProductIdAndUser_IdAndDeletedFalse(Long productId, Long userId);
+    boolean existsByProduct_ProductIdAndUser_UserIdAndDeletedFalse(Long productId, Long userId);
 
     @Query("SELECT AVG(r.rating) FROM Review r WHERE r.product.productId= :productId AND r.deleted=false")
     Optional<BigDecimal> calculateAverageRating(@Param("productId") Long productId);

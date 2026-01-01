@@ -22,26 +22,29 @@ import java.util.stream.Collectors;
 @Table(name = "auth_users", schema = "e-commerce")
 public class AuthUser implements UserDetails {
     @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "user_id")
+    private Long authUserId;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "authUser")
-    private Set<Token> tokens;
-    @OneToOne
-    @MapsId // Tells JPA that this entity shares its PK with 'user'
-    @JoinColumn(name = "id") // Maps to the same column
-    private User user;
+
     @Column(name = "last_login")
     private Instant lastLogin;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "auth_user_roles",
-            joinColumns = @JoinColumn(name = "auth_user_id"),
+    @JoinTable(
+            name = "auth_user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-
     private Set<Role> roles;
 
     @Override

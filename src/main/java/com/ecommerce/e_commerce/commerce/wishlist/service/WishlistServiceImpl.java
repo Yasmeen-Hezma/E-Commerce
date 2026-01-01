@@ -79,7 +79,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     private Wishlist getOrCreateWishlist(long userId) {
         return wishlistRepository
-                .findByUserId(userId)
+                .findByUser_UserId(userId)
                 .orElseGet(() -> createAndSaveNewWishlist(userId));
     }
 
@@ -164,7 +164,7 @@ public class WishlistServiceImpl implements WishlistService {
         if (!userRepository.existsById(userId)) {
             throw new ItemNotFoundException(USER_NOT_FOUND);
         }
-        return wishlistRepository.findByUserId(userId).orElseGet(() -> createAndSaveNewWishlist(userId));
+        return wishlistRepository.findByUser_UserId(userId).orElseGet(() -> createAndSaveNewWishlist(userId));
     }
 
     private Wishlist createAndSaveNewWishlist(Long userId) {

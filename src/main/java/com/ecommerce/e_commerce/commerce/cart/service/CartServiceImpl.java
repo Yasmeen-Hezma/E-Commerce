@@ -129,7 +129,7 @@ public class CartServiceImpl implements CartService {
 
     private Cart getCartByUser(Long userId) {
         userService.getUserById(userId);
-        return cartRepository.findByUserId(userId).orElseGet(() -> createAndSaveNewCart(userId));
+        return cartRepository.findByUser_UserId(userId).orElseGet(() -> createAndSaveNewCart(userId));
     }
 
     private Cart createAndSaveNewCart(Long userId) {
@@ -142,7 +142,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private Cart getOrCreateCart(Long userId) {
-        return cartRepository.findByUserId(userId)
+        return cartRepository.findByUser_UserId(userId)
                 .orElseGet(() -> createAndSaveNewCart(userId));
     }
 

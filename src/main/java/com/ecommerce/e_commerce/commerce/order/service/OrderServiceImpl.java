@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse addShippingAddress(Long orderId, ShippingAddressRequest addressRequest, HttpServletRequest request) {
         User user = userService.getUserByRequest(request);
         Order order = getOrderById(orderId);
-        if (!user.getId().equals(order.getUser().getId())) {
+        if (!user.getUserId().equals(order.getUser().getUserId())) {
             throw new UnauthorizedException(YOU_CAN_ONLY_ACCESS_YOUR_OWN_ORDERS);
         }
         if (order.getStatus() != OrderStatus.PENDING) {

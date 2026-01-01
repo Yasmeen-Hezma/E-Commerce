@@ -20,7 +20,7 @@ public interface ProfileMapper {
     @Mapping(target = "hasCompleteAddress", expression = "java(user.hasCompleteShippingAddress())")
     ProfileResponse toResponse(User user);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     @Mapping(target = "authUser", ignore = true)
     @Mapping(target = "cart", ignore = true)
     @Mapping(target = "orders", ignore = true)

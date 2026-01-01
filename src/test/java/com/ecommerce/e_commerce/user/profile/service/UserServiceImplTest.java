@@ -76,7 +76,7 @@ class UserServiceImplTest {
                 .roleEnum(RoleEnum.CUSTOMER)
                 .build();
         user = User.builder()
-                .id(1L)
+                .userId(1L)
                 .firstName("Yousef")
                 .lastName("Mahmoud")
                 .phone("01098765432")
@@ -89,7 +89,7 @@ class UserServiceImplTest {
                 .build();
         authUser = AuthUser
                 .builder()
-                .id(1L)
+                .authUserId(1L)
                 .user(user)
                 .email("Yousef@email.com")
                 .password("encodedPassword")
@@ -146,7 +146,7 @@ class UserServiceImplTest {
         AuthUser result = userService.createUser(customerRegisterRequest);
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getAuthUserId()).isEqualTo(1L);
         assertThat(result.getEmail()).isEqualTo("Yousef@email.com");
         assertThat(result.getUser()).isNotNull();
         assertThat(result.getRoles()).contains(customerRole);
@@ -163,7 +163,7 @@ class UserServiceImplTest {
     void createUser_ShouldCreateSeller_WhenValidSellerRequest() {
         // Arrange
         User sellerUser = User.builder()
-                .id(2L)
+                .userId(2L)
                 .brandName("Nike")
                 .sellerType(SellerType.INDIVIDUAL)
                 .businessAddress("Business St 123")
@@ -177,7 +177,7 @@ class UserServiceImplTest {
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
         when(authUserRepository.save(any(AuthUser.class))).thenAnswer(invocation -> {
             AuthUser savedAuthUser = invocation.getArgument(0);
-            savedAuthUser.setId(2L);
+            savedAuthUser.setAuthUserId(2L);
             return savedAuthUser;
         });
 
@@ -185,7 +185,7 @@ class UserServiceImplTest {
         AuthUser result = userService.createUser(sellerRegisterRequest);
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(2L);
+        assertThat(result.getAuthUserId()).isEqualTo(2L);
         assertThat(result.getEmail()).isEqualTo("seller@email.com");
         assertThat(result.getUser()).isNotNull();
         assertThat(result.getRoles()).contains(sellerRole);
@@ -268,7 +268,7 @@ class UserServiceImplTest {
         User result = userService.getUserByRequest(httpRequest);
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getUserId()).isEqualTo(1L);
         verify(httpRequest).getHeader("Authorization");
         verify(jwtService).extractUserIdFromToken(token);
         verify(userRepository).findById(1L);
@@ -282,7 +282,7 @@ class UserServiceImplTest {
         User result = userService.getUserById(1L);
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getUserId()).isEqualTo(1L);
         verify(userRepository).findById(1L);
     }
 
@@ -305,7 +305,7 @@ class UserServiceImplTest {
         AuthUser result = userService.getAuthUserByEmail("Yousef@email.com");
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getAuthUserId()).isEqualTo(1L);
         assertThat(result.getEmail()).isEqualTo("Yousef@email.com");
         verify(authUserRepository).findByEmail("Yousef@email.com");
     }
@@ -346,7 +346,7 @@ class UserServiceImplTest {
         // Arrange
         User userWithoutAddress = User
                 .builder()
-                .id(2L)
+                .userId(2L)
                 .firstName("Joe")
                 .lastName("Doe")
                 .build();

@@ -21,8 +21,8 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
+    @Column(name = "user_id",nullable = false)
+    private Long userId;
     // ========== BASIC USER INFO ==========
     @Column(name = "first_name")
     private String firstName;

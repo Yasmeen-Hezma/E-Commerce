@@ -63,7 +63,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void revokeAllUserTokens(AuthUser user) {
-        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
+        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getAuthUserId());
         if (validUserTokens.isEmpty()) {
             return;
         }

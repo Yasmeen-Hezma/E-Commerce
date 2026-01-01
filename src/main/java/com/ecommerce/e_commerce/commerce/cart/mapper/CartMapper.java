@@ -19,7 +19,7 @@ import java.util.List;
 )
 public interface CartMapper {
     @Mapping(target = "totalPrice", expression = "java(getTotalPrice(cart))")
-    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "userId", source = "user.userId")
     @Mapping(target = "items", source = "cartItems")
     @Mapping(target = "id", source = "cartId")
     CartResponse toResponse(Cart cart);

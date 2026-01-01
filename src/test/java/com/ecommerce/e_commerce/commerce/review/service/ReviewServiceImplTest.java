@@ -81,7 +81,7 @@ class ReviewServiceImplTest {
 
         user = User
                 .builder()
-                .id(1L)
+                .userId(1L)
                 .firstName("John")
                 .lastName("Doe")
                 .phone("1234567890")
@@ -123,7 +123,7 @@ class ReviewServiceImplTest {
         // Arrange
         when(userService.getUserByRequest(httpRequest)).thenReturn(user);
         when(productService.getNonDeletedProductById(1L)).thenReturn(product);
-        when(reviewRepository.existsByProduct_ProductIdAndUser_IdAndDeletedFalse(1L, 1L)).thenReturn(false);
+        when(reviewRepository.existsByProduct_ProductIdAndUser_UserIdAndDeletedFalse(1L, 1L)).thenReturn(false);
         when(reviewMapper.toEntity(reviewRequest, product, user)).thenReturn(review);
         when(reviewRepository.save(any(Review.class))).thenReturn(review);
         when(reviewRepository.calculateAverageRating(1L)).thenReturn(Optional.of(BigDecimal.valueOf(5)));
@@ -138,7 +138,7 @@ class ReviewServiceImplTest {
 
         verify(userService).getUserByRequest(httpRequest);
         verify(productService).getNonDeletedProductById(1L);
-        verify(reviewRepository).existsByProduct_ProductIdAndUser_IdAndDeletedFalse(1L, 1L);
+        verify(reviewRepository).existsByProduct_ProductIdAndUser_UserIdAndDeletedFalse(1L, 1L);
         verify(reviewMapper).toEntity(reviewRequest, product, user);
         verify(reviewRepository).save(any(Review.class));
         verify(reviewRepository).calculateAverageRating(1L);
@@ -164,13 +164,13 @@ class ReviewServiceImplTest {
         // Arrange
         when(userService.getUserByRequest(httpRequest)).thenReturn(user);
         when(productService.getNonDeletedProductById(1L)).thenReturn(product);
-        when(reviewRepository.existsByProduct_ProductIdAndUser_IdAndDeletedFalse(1L, 1L)).thenReturn(true);
+        when(reviewRepository.existsByProduct_ProductIdAndUser_UserIdAndDeletedFalse(1L, 1L)).thenReturn(true);
         // Act & Assert
         assertThatThrownBy(() -> reviewService.createReview(1L, reviewRequest, httpRequest))
                 .isInstanceOf(DuplicateItemException.class);
         verify(userService).getUserByRequest(httpRequest);
         verify(productService).getNonDeletedProductById(1L);
-        verify(reviewRepository).existsByProduct_ProductIdAndUser_IdAndDeletedFalse(1L, 1L);
+        verify(reviewRepository).existsByProduct_ProductIdAndUser_UserIdAndDeletedFalse(1L, 1L);
         verify(reviewRepository, never()).save(any(Review.class));
     }
 

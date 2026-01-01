@@ -86,7 +86,7 @@ class OrderServiceImplTest {
                 .build();
 
         user = User.builder()
-                .id(1L)
+                .userId(1L)
                 .firstName("Yousef")
                 .lastName("Mahmoud")
                 .phone("01098765432")
@@ -285,7 +285,7 @@ class OrderServiceImplTest {
         // Arrange
         User differentUser = User
                 .builder()
-                .id(99L)
+                .userId(99L)
                 .firstName("John")
                 .lastName("Doe")
                 .build();

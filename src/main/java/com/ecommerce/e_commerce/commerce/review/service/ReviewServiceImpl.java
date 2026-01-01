@@ -42,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
         User user = userService.getUserByRequest(request);
         Product product = productService.getNonDeletedProductById(productId);
 
-        if (reviewRepository.existsByProduct_ProductIdAndUser_IdAndDeletedFalse(productId, user.getId())) {
+        if (reviewRepository.existsByProduct_ProductIdAndUser_UserIdAndDeletedFalse(productId, user.getUserId())) {
             throw new DuplicateItemException(YOU_HAVE_ALREADY_REVIEWED_THIS_PRODUCT);
         }
 
@@ -128,7 +128,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void validateReviewOwnership(Review review, Long userId) {
-        if (!review.getUser().getId().equals(userId)) {
+        if (!review.getUser().getUserId().equals(userId)) {
             throw new UnauthorizedException(YOU_CAN_ONLY_ACCESS_YOUR_OWN_REVIEWS);
         }
     }

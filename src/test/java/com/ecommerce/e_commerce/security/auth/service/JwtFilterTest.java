@@ -55,7 +55,7 @@ class JwtFilterTest {
 
         authUser = AuthUser
                 .builder()
-                .id(1L)
+                .authUserId(1L)
                 .email("test@email.com")
                 .password("encodedPassword")
                 .roles(Collections.singleton(customerRole))

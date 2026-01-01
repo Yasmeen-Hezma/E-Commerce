@@ -19,7 +19,7 @@ public interface ReviewMapper {
 
     @Mapping(target = "productId", source = "product.productId")
     @Mapping(target = "productName", source = "product.productName")
-    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "userId", source = "user.userId")
     @Mapping(target = "userName", expression = "java(review.getUser().getFirstName()+\" \"+review.getUser().getLastName())")
     ReviewResponse toResponse(Review review);
 

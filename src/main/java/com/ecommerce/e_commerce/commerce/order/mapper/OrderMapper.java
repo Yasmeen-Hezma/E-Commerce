@@ -14,7 +14,7 @@ import org.mapstruct.Mapping;
 public interface OrderMapper {
 
     @Mapping(source = "orderId", target = "id")
-    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.userId", target = "userId")
     @Mapping(source = "orderItems", target = "items")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "orderTotal", target = "totalPrice")

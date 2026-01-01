@@ -70,14 +70,14 @@ class ProfileServiceImplTest {
     void setUp() {
         authUser = AuthUser
                 .builder()
-                .id(1L)
+                .authUserId(1L)
                 .password("encodedPassword")
                 .email("john.doe@example.com")
                 .build();
 
         user = User
                 .builder()
-                .id(1L)
+                .userId(1L)
                 .firstName("John")
                 .lastName("Doe")
                 .authUser(authUser)
@@ -259,7 +259,7 @@ class ProfileServiceImplTest {
         Page<Order> orderPage = new PageImpl<>(List.of(order1, order2), pageable, 2);
 
         when(userService.getUserByRequest(httpRequest)).thenReturn(user);
-        when(orderRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable)).thenReturn(orderPage);
+        when(orderRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId(), pageable)).thenReturn(orderPage);
         when(orderMapper.toSummaryResponse(order1)).thenReturn(orderSummeryResponse1);
         when(orderMapper.toSummaryResponse(order2)).thenReturn(orderSummeryResponse2);
         // Act
@@ -271,7 +271,7 @@ class ProfileServiceImplTest {
         assertThat(result.getPayload().get(0).getPaymentMethod()).isEqualTo(PaymentMethod.COD);
         assertThat(result.getPayload().get(1).getPaymentMethod()).isEqualTo(PaymentMethod.PAYPAL);
         verify(userService).getUserByRequest(httpRequest);
-        verify(orderRepository).findByUserIdOrderByCreatedAtDesc(user.getId(), pageable);
+        verify(orderRepository).findByUser_UserIdOrderByCreatedAtDesc(user.getUserId(), pageable);
         verify(orderMapper, times(2)).toSummaryResponse(any(Order.class));
     }
 
@@ -282,7 +282,7 @@ class ProfileServiceImplTest {
         Page<Order> emptyPage = new PageImpl<>(List.of(), pageable, 0);
 
         when(userService.getUserByRequest(httpRequest)).thenReturn(user);
-        when(orderRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable)).thenReturn(emptyPage);
+        when(orderRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId(), pageable)).thenReturn(emptyPage);
         // Act
         PaginatedResponse<OrderSummeryResponse> result = profileService.getMyOrders(httpRequest, pageable);
         // Assert
@@ -290,7 +290,7 @@ class ProfileServiceImplTest {
         assertThat(result.getPayload()).isEmpty();
         assertThat(result.getTotal()).isEqualTo(0L);
         verify(userService).getUserByRequest(httpRequest);
-        verify(orderRepository).findByUserIdOrderByCreatedAtDesc(user.getId(), pageable);
+        verify(orderRepository).findByUser_UserIdOrderByCreatedAtDesc(user.getUserId(), pageable);
         verify(orderMapper, never()).toSummaryResponse(any(Order.class));
     }
 }

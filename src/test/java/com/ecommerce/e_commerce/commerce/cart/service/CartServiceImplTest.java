@@ -67,7 +67,7 @@ class CartServiceImplTest {
     void setUp() {
         user = User
                 .builder()
-                .id(1L)
+                .userId(1L)
                 .firstName("John")
                 .lastName("Doe")
                 .phone("1234567890")
@@ -127,7 +127,7 @@ class CartServiceImplTest {
     void addItemToCart_ShouldAddNewItem_WhenItemDoesNotExist() {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem);
         when(cartRepository.save(any(Cart.class))).thenReturn(cart);
@@ -139,7 +139,7 @@ class CartServiceImplTest {
         assertThat(result.getProductId()).isEqualTo(100L);
         assertThat(result.getQuantity()).isEqualTo(2);
         verify(userService).getUserId(httpRequest);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(cartItemRepository).save(any(CartItem.class));
         verify(cartRepository).save(cart);
@@ -152,7 +152,7 @@ class CartServiceImplTest {
         cart.addCartItem(cartItem);
 
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem);
         when(cartRepository.save(any(Cart.class))).thenReturn(cart);
         when(cartItemMapper.toResponse(any(CartItem.class))).thenAnswer(
@@ -172,7 +172,7 @@ class CartServiceImplTest {
         assertThat(result.getProductId()).isEqualTo(100L);
         assertThat(result.getQuantity()).isEqualTo(5);
         verify(userService).getUserId(httpRequest);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(cartItemRepository).save(any(CartItem.class));
         verify(cartRepository).save(cart);
         verify(cartItemMapper).toResponse(any(CartItem.class));
@@ -182,7 +182,7 @@ class CartServiceImplTest {
     void addItemToCart_ShouldCreateCart_WhenCartDoesNotExist() {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.empty());
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.empty());
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(cartItemRepository.save(any(CartItem.class))).thenReturn(cartItem);
         when(cartRepository.save(any(Cart.class))).thenReturn(cart);
@@ -194,7 +194,7 @@ class CartServiceImplTest {
         assertThat(result.getProductId()).isEqualTo(100L);
         assertThat(result.getQuantity()).isEqualTo(2);
         verify(userService).getUserId(httpRequest);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(cartItemRepository).save(any(CartItem.class));
         verify(cartRepository, times(2)).save(any(Cart.class));
@@ -206,7 +206,7 @@ class CartServiceImplTest {
         // Arrange
         cartItemRequest.setProductId(999L);
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(productService.getNonDeletedProductById(999L))
                 .thenThrow(new ItemNotFoundException(PRODUCT_NOT_FOUND));
         // Act & Assert
@@ -214,7 +214,7 @@ class CartServiceImplTest {
                 .isInstanceOf(ItemNotFoundException.class)
                 .hasMessageContaining(PRODUCT_NOT_FOUND);
         verify(userService).getUserId(httpRequest);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(999L);
         verify(cartItemRepository, never()).save(any(CartItem.class));
         verify(cartRepository, never()).save(any(Cart.class));
@@ -225,7 +225,7 @@ class CartServiceImplTest {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userService.getUserById(1L)).thenReturn(user);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(cartMapper.toResponse(cart)).thenReturn(cartResponse);
         // Act
         CartResponse result = cartService.getCartResponseByUser(httpRequest);
@@ -233,7 +233,7 @@ class CartServiceImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getUserId()).isEqualTo(1L);
         verify(userService).getUserId(httpRequest);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(cartMapper).toResponse(cart);
     }
 
@@ -242,7 +242,7 @@ class CartServiceImplTest {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userService.getUserById(1L)).thenReturn(user);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.empty());
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.empty());
         when(userService.getUserById(1L)).thenReturn(user);
         when(cartRepository.save(any(Cart.class))).thenReturn(cart);
         when(cartMapper.toResponse(any(Cart.class))).thenReturn(cartResponse);
@@ -252,7 +252,7 @@ class CartServiceImplTest {
         assertThat(result).isNotNull();
         assertThat(result.getUserId()).isEqualTo(1L);
         verify(userService).getUserId(httpRequest);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(userService, times(2)).getUserById(1L);
         verify(cartRepository).save(any(Cart.class));
         verify(cartMapper).toResponse(any(Cart.class));
@@ -285,7 +285,7 @@ class CartServiceImplTest {
 
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userService.getUserById(1L)).thenReturn(user);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(productService.checkStockAndWarn(product, 5)).thenReturn(Optional.empty());
         when(cartMapper.toResponseWithWarnings(any(Cart.class), anyList()))
@@ -312,7 +312,7 @@ class CartServiceImplTest {
         assertThat(result.getItems().getFirst().getQuantity()).isEqualTo(5);
         verify(userService).getUserId(httpRequest);
         verify(userService).getUserById(1L);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(productService).checkStockAndWarn(product, 5);
         verify(cartMapper).toResponseWithWarnings(any(Cart.class), anyList());
@@ -336,7 +336,7 @@ class CartServiceImplTest {
                 .build();
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userService.getUserById(1L)).thenReturn(user);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(productService.checkStockAndWarn(product, 500)).thenReturn(Optional.of(warning));
         when(cartMapper.toResponseWithWarnings(any(Cart.class), anyList()))
@@ -367,7 +367,7 @@ class CartServiceImplTest {
         assertThat(result.getWarnings().getFirst().getProductId()).isEqualTo(100L);
         verify(userService).getUserId(httpRequest);
         verify(userService).getUserById(1L);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(productService).checkStockAndWarn(product, 500);
         verify(cartMapper).toResponseWithWarnings(any(Cart.class), anyList());
@@ -395,7 +395,7 @@ class CartServiceImplTest {
 
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userService.getUserById(1L)).thenReturn(user);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(productService.checkStockAndWarn(product, 3)).thenReturn(Optional.empty());
         when(cartMapper.toResponseWithWarnings(any(Cart.class), anyList()))
@@ -423,7 +423,7 @@ class CartServiceImplTest {
         assertThat(result.getItems().getFirst().getQuantity()).isEqualTo(3);
         verify(userService).getUserId(httpRequest);
         verify(userService).getUserById(1L);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(productService).checkStockAndWarn(product, 3);
         verify(cartMapper).toResponseWithWarnings(any(Cart.class), anyList());
@@ -434,14 +434,14 @@ class CartServiceImplTest {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userService.getUserById(1L)).thenReturn(user);
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.of(cart));
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.of(cart));
         // Act
         cartService.clearCart(httpRequest);
         // Assert
         assertThat(cart.getCartItems()).isEmpty();
         verify(userService).getUserId(httpRequest);
         verify(userService).getUserById(1L);
-        verify(cartRepository).findByUserId(1L);
+        verify(cartRepository).findByUser_UserId(1L);
     }
 
     @Test
@@ -457,7 +457,7 @@ class CartServiceImplTest {
     @Test
     void getOrCreateCart_ShouldCreateNewCart_WhenCartDoesNotExist() {
         // Arrange
-        when(cartRepository.findByUserId(1L)).thenReturn(Optional.empty());
+        when(cartRepository.findByUser_UserId(1L)).thenReturn(Optional.empty());
         when(userService.getUserById(1L)).thenReturn(user);
         when(cartRepository.save(any(Cart.class))).thenReturn(cart);
         when(userService.getUserId(httpRequest)).thenReturn(1L);

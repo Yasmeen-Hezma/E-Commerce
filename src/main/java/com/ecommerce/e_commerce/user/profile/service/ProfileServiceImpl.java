@@ -75,7 +75,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional(readOnly = true)
     public PaginatedResponse<OrderSummeryResponse> getMyOrders(HttpServletRequest request, Pageable pageable) {
         User user = userService.getUserByRequest(request);
-        Page<Order> orderPage = orderRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable);
+        Page<Order> orderPage = orderRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId(), pageable);
         List<OrderSummeryResponse>content=orderPage.map(orderMapper::toSummaryResponse).getContent();
         return new PaginatedResponse<>(content,orderPage.getTotalElements());
     }

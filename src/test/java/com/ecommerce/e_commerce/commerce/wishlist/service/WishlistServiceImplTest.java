@@ -70,7 +70,7 @@ class WishlistServiceImplTest {
     void setUp() {
         user = User
                 .builder()
-                .id(1L)
+                .userId(1L)
                 .firstName("John")
                 .lastName("Doe")
                 .phone("1234567890")
@@ -130,7 +130,7 @@ class WishlistServiceImplTest {
     void addItemToWishlist_ShouldAddNewItem_WhenItemDoesNotExist() {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(wishlistItemRepository.save(any(WishlistItem.class))).thenReturn(wishlistItem);
         when(wishlistRepository.save(any(Wishlist.class))).thenReturn(wishlist);
@@ -142,7 +142,7 @@ class WishlistServiceImplTest {
         assertThat(result.getProductId()).isEqualTo(100L);
         assertThat(result.getQuantity()).isEqualTo(2);
         verify(userService).getUserId(httpRequest);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(wishlistItemRepository).save(any(WishlistItem.class));
         verify(wishlistRepository).save(wishlist);
@@ -155,7 +155,7 @@ class WishlistServiceImplTest {
         wishlist.addWishlistItem(wishlistItem);
 
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         when(wishlistItemRepository.save(any(WishlistItem.class))).thenReturn(wishlistItem);
         when(wishlistRepository.save(any(Wishlist.class))).thenReturn(wishlist);
         when(wishlistItemMapper.toResponse(any(WishlistItem.class))).thenAnswer(
@@ -176,7 +176,7 @@ class WishlistServiceImplTest {
         assertThat(result.getProductId()).isEqualTo(100L);
         assertThat(result.getQuantity()).isEqualTo(5);
         verify(userService).getUserId(httpRequest);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(wishlistItemRepository).save(any(WishlistItem.class));
         verify(wishlistRepository).save(wishlist);
         verify(wishlistItemMapper).toResponse(any(WishlistItem.class));
@@ -186,7 +186,7 @@ class WishlistServiceImplTest {
     void addItemToWishlist_ShouldCreateWishlist_WhenWishlistDoesNotExist() {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.empty());
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.empty());
         when(userService.getUserById(1L)).thenReturn(user);
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(wishlistItemRepository.save(any(WishlistItem.class))).thenReturn(wishlistItem);
@@ -199,7 +199,7 @@ class WishlistServiceImplTest {
         assertThat(result.getProductId()).isEqualTo(100L);
         assertThat(result.getQuantity()).isEqualTo(2);
         verify(userService).getUserId(httpRequest);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(userService).getUserById(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(wishlistItemRepository).save(any(WishlistItem.class));
@@ -212,7 +212,7 @@ class WishlistServiceImplTest {
         // Arrange
         wishlistItemRequest.setProductId(999L);
         when(userService.getUserId(httpRequest)).thenReturn(1L);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         when(productService.getNonDeletedProductById(999L))
                 .thenThrow(new ItemNotFoundException(PRODUCT_NOT_FOUND));
         // Act & Assert
@@ -220,7 +220,7 @@ class WishlistServiceImplTest {
                 .isInstanceOf(ItemNotFoundException.class)
                 .hasMessageContaining(PRODUCT_NOT_FOUND);
         verify(userService).getUserId(httpRequest);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(999L);
         verify(wishlistItemRepository, never()).save(any(WishlistItem.class));
         verify(wishlistRepository, never()).save(any(Wishlist.class));
@@ -231,7 +231,7 @@ class WishlistServiceImplTest {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         when(wishlistMapper.toResponse(wishlist)).thenReturn(wishlistResponse);
         // Act
         WishlistResponse result = wishlistService.getWishlistByUser(httpRequest);
@@ -240,7 +240,7 @@ class WishlistServiceImplTest {
         assertThat(result.getUserId()).isEqualTo(1L);
         verify(userService).getUserId(httpRequest);
         verify(userRepository).existsById(1L);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(wishlistMapper).toResponse(wishlist);
     }
 
@@ -249,7 +249,7 @@ class WishlistServiceImplTest {
         // Arrange
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.empty());
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.empty());
         when(userService.getUserById(1L)).thenReturn(user);
         when(wishlistRepository.save(any(Wishlist.class))).thenReturn(wishlist);
         when(wishlistMapper.toResponse(any(Wishlist.class))).thenReturn(wishlistResponse);
@@ -260,7 +260,7 @@ class WishlistServiceImplTest {
         assertThat(result.getUserId()).isEqualTo(1L);
         verify(userService).getUserId(httpRequest);
         verify(userRepository).existsById(1L);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(userService).getUserById(1L);
         verify(wishlistRepository).save(any(Wishlist.class));
         verify(wishlistMapper).toResponse(any(Wishlist.class));
@@ -277,7 +277,7 @@ class WishlistServiceImplTest {
                 .hasMessageContaining(USER_NOT_FOUND);
         verify(userService).getUserId(httpRequest);
         verify(userRepository).existsById(1L);
-        verify(wishlistRepository, never()).findByUserId(anyLong());
+        verify(wishlistRepository, never()).findByUser_UserId(anyLong());
     }
 
     @Test
@@ -294,7 +294,7 @@ class WishlistServiceImplTest {
 
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(productService.checkStockAndWarn(product, 5)).thenReturn(Optional.empty());
         when(wishlistMapper.toResponseWithWarnings(any(Wishlist.class), anyList()))
@@ -321,7 +321,7 @@ class WishlistServiceImplTest {
         assertThat(result.getItems().getFirst().getQuantity()).isEqualTo(5);
         verify(userService).getUserId(httpRequest);
         verify(userRepository).existsById(1L);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(productService).checkStockAndWarn(product, 5);
         verify(wishlistMapper).toResponseWithWarnings(any(Wishlist.class), anyList());
@@ -347,7 +347,7 @@ class WishlistServiceImplTest {
 
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(productService.checkStockAndWarn(product, 500)).thenReturn(Optional.of(warning));
         when(wishlistMapper.toResponseWithWarnings(any(Wishlist.class), anyList()))
@@ -378,7 +378,7 @@ class WishlistServiceImplTest {
         assertThat(result.getWarnings().getFirst().getProductId()).isEqualTo(100L);
         verify(userService).getUserId(httpRequest);
         verify(userRepository).existsById(1L);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(productService).checkStockAndWarn(product, 500);
         verify(wishlistMapper).toResponseWithWarnings(any(Wishlist.class), anyList());
@@ -407,7 +407,7 @@ class WishlistServiceImplTest {
 
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         when(productService.getNonDeletedProductById(100L)).thenReturn(product);
         when(productService.checkStockAndWarn(product, 3)).thenReturn(Optional.empty());
         when(wishlistMapper.toResponseWithWarnings(any(Wishlist.class), anyList()))
@@ -435,7 +435,7 @@ class WishlistServiceImplTest {
         assertThat(result.getItems().getFirst().getQuantity()).isEqualTo(3);
         verify(userService).getUserId(httpRequest);
         verify(userRepository).existsById(1L);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
         verify(productService).getNonDeletedProductById(100L);
         verify(productService).checkStockAndWarn(product, 3);
         verify(wishlistMapper).toResponseWithWarnings(any(Wishlist.class), anyList());
@@ -447,13 +447,13 @@ class WishlistServiceImplTest {
         wishlist.addWishlistItem(wishlistItem);
         when(userService.getUserId(httpRequest)).thenReturn(1L);
         when(userRepository.existsById(1L)).thenReturn(true);
-        when(wishlistRepository.findByUserId(1L)).thenReturn(Optional.of(wishlist));
+        when(wishlistRepository.findByUser_UserId(1L)).thenReturn(Optional.of(wishlist));
         // Act
         wishlistService.clearWishlist(httpRequest);
         // Assert
         assertThat(wishlist.getWishlistItems()).isEmpty();
         verify(userService).getUserId(httpRequest);
         verify(userRepository).existsById(1L);
-        verify(wishlistRepository).findByUserId(1L);
+        verify(wishlistRepository).findByUser_UserId(1L);
     }
 }

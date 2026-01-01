@@ -73,7 +73,7 @@ class AuthenticationServiceImplTest {
 
         authUser = AuthUser
                 .builder()
-                .id(1L)
+                .authUserId(1L)
                 .email(email)
                 .password("encodedPassword")
                 .roles(Collections.singleton(customerRole))

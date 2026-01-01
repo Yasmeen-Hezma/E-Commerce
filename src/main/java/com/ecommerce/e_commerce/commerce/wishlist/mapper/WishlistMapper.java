@@ -17,7 +17,7 @@ import java.util.List;
         uses = {WishlistItemMapper.class}
 )
 public interface WishlistMapper {
-    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "userId", source = "user.userId")
     @Mapping(target = "items", source = "wishlistItems")
     @Mapping(target = "id", source = "wishlistId")
     WishlistResponse toResponse(Wishlist wishlist);
