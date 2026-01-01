@@ -55,7 +55,7 @@ class TokenServiceImplTest {
                 .build();
         authUser = AuthUser
                 .builder()
-                .authUserId(1L)
+                .userId(1L)
                 .email("Yousef@email.com")
                 .password("encodedPassword")
                 .roles(Collections.singleton(customerRole))

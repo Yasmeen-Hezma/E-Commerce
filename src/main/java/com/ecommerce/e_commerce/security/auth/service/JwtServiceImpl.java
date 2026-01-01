@@ -28,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
     public Long extractUserIdFromToken(String token) {
         String userEmail = extractUsername(token);
         AuthUser authUser = authUserRepository.findByEmail(userEmail).orElseThrow(() -> new ItemNotFoundException(USER_NOT_FOUND));
-        return authUser.getAuthUserId();
+        return authUser.getUserId();
     }
 
     @Override

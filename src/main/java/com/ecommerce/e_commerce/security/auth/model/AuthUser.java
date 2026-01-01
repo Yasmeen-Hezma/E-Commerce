@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class AuthUser implements UserDetails {
     @Id
     @Column(name = "user_id")
-    private Long authUserId;
+    private Long userId;
 
     @OneToOne
     @MapsId

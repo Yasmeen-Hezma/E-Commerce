@@ -89,7 +89,7 @@ class UserServiceImplTest {
                 .build();
         authUser = AuthUser
                 .builder()
-                .authUserId(1L)
+                .userId(1L)
                 .user(user)
                 .email("Yousef@email.com")
                 .password("encodedPassword")
@@ -146,7 +146,7 @@ class UserServiceImplTest {
         AuthUser result = userService.createUser(customerRegisterRequest);
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getAuthUserId()).isEqualTo(1L);
+        assertThat(result.getUserId()).isEqualTo(1L);
         assertThat(result.getEmail()).isEqualTo("Yousef@email.com");
         assertThat(result.getUser()).isNotNull();
         assertThat(result.getRoles()).contains(customerRole);
@@ -177,7 +177,7 @@ class UserServiceImplTest {
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
         when(authUserRepository.save(any(AuthUser.class))).thenAnswer(invocation -> {
             AuthUser savedAuthUser = invocation.getArgument(0);
-            savedAuthUser.setAuthUserId(2L);
+            savedAuthUser.setUserId(2L);
             return savedAuthUser;
         });
 
@@ -185,7 +185,7 @@ class UserServiceImplTest {
         AuthUser result = userService.createUser(sellerRegisterRequest);
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getAuthUserId()).isEqualTo(2L);
+        assertThat(result.getUserId()).isEqualTo(2L);
         assertThat(result.getEmail()).isEqualTo("seller@email.com");
         assertThat(result.getUser()).isNotNull();
         assertThat(result.getRoles()).contains(sellerRole);
@@ -305,7 +305,7 @@ class UserServiceImplTest {
         AuthUser result = userService.getAuthUserByEmail("Yousef@email.com");
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getAuthUserId()).isEqualTo(1L);
+        assertThat(result.getUserId()).isEqualTo(1L);
         assertThat(result.getEmail()).isEqualTo("Yousef@email.com");
         verify(authUserRepository).findByEmail("Yousef@email.com");
     }

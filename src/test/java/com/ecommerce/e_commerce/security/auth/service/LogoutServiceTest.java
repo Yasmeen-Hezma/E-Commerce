@@ -46,7 +46,7 @@ class LogoutServiceTest {
     void setUp() {
         authUser = AuthUser
                 .builder()
-                .authUserId(1L)
+                .userId(1L)
                 .email("test@email.com")
                 .password("encodedPassword")
                 .build();

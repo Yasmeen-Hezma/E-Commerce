@@ -70,7 +70,7 @@ class ProfileServiceImplTest {
     void setUp() {
         authUser = AuthUser
                 .builder()
-                .authUserId(1L)
+                .userId(1L)
                 .password("encodedPassword")
                 .email("john.doe@example.com")
                 .build();
