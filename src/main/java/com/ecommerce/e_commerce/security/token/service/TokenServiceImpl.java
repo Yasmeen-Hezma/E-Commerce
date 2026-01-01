@@ -7,7 +7,7 @@ import com.ecommerce.e_commerce.security.auth.utils.JwtUtils;
 import com.ecommerce.e_commerce.security.auth.model.AuthUser;
 import com.ecommerce.e_commerce.security.token.dto.TokenResponse;
 import com.ecommerce.e_commerce.security.token.model.Token;
-import com.ecommerce.e_commerce.security.token.model.TokenType;
+import com.ecommerce.e_commerce.security.token.enums.TokenType;
 import com.ecommerce.e_commerce.security.token.repository.TokenRepository;
 import com.ecommerce.e_commerce.security.auth.enums.RoleEnum;
 import io.jsonwebtoken.Jwts;

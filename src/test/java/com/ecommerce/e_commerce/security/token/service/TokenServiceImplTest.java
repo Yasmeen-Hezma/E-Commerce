@@ -7,7 +7,7 @@ import com.ecommerce.e_commerce.security.auth.model.Role;
 import com.ecommerce.e_commerce.security.auth.repository.RoleRepository;
 import com.ecommerce.e_commerce.security.token.dto.TokenResponse;
 import com.ecommerce.e_commerce.security.token.model.Token;
-import com.ecommerce.e_commerce.security.token.model.TokenType;
+import com.ecommerce.e_commerce.security.token.enums.TokenType;
 import com.ecommerce.e_commerce.security.token.repository.TokenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

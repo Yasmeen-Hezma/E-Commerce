@@ -20,7 +20,7 @@ public class Wishlist {
     @Column(name = "wishlist_id", nullable = false)
     private Long wishlistId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

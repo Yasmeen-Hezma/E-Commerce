@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Table(name = "auth_users", schema = "e-commerce")
 public class AuthUser implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "email")

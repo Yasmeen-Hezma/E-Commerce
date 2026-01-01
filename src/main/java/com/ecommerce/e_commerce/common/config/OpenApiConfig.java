@@ -35,10 +35,7 @@ public class OpenApiConfig {
                 .servers(List.of(
                         new Server()
                                 .url(baseUrl)
-                                .description("Current Environment"),
-                        new Server()
-                                .url("http://localhost:8080")
-                                .description("Local Development")
+                                .description("Current Environment")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new io.swagger.v3.oas.models.Components()

@@ -1,6 +1,7 @@
 package com.ecommerce.e_commerce.security.token.model;
 
 import com.ecommerce.e_commerce.security.auth.model.AuthUser;
+import com.ecommerce.e_commerce.security.token.enums.TokenType;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -6,6 +6,7 @@ import com.ecommerce.e_commerce.commerce.category.model.Category;
 import com.ecommerce.e_commerce.commerce.order.model.OrderItem;
 import com.ecommerce.e_commerce.commerce.product.enums.ProductStatus;
 import com.ecommerce.e_commerce.commerce.review.model.Review;
+import com.ecommerce.e_commerce.commerce.wishlist.model.WishlistItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.Min;
@@ -73,7 +74,9 @@ public class Product {
     @Builder.Default
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
-
+    @Builder.Default
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WishlistItem> wishlistItems = new ArrayList<>();
     @Builder.Default
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();

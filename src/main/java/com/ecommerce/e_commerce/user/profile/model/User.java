@@ -1,5 +1,6 @@
 package com.ecommerce.e_commerce.user.profile.model;
 
+import com.ecommerce.e_commerce.commerce.wishlist.model.Wishlist;
 import com.ecommerce.e_commerce.security.auth.enums.SellerType;
 import com.ecommerce.e_commerce.security.auth.model.AuthUser;
 import com.ecommerce.e_commerce.commerce.cart.model.Cart;
@@ -56,6 +57,8 @@ public class User {
     private AuthUser authUser;
     @OneToOne(mappedBy = "user")
     private Cart cart;
+    @OneToOne(mappedBy = "user")
+    private Wishlist wishlist;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
