@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,13 +46,13 @@ public class ProductController {
     }
 
     @Operation(summary = "Create new product")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductResponse> createProduct(@Valid @ModelAttribute ProductRequest request) {
         return ResponseEntity.ok(productService.createProduct(request));
     }
 
     @Operation(summary = "Update existing product")
-    @PatchMapping("{id}")
+    @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @Valid @ModelAttribute ProductRequest request) {
         return ResponseEntity.ok(productService.updateProduct(id, request));
     }

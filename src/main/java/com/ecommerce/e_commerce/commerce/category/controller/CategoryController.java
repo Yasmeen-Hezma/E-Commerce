@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,13 +33,13 @@ public class CategoryController {
     }
 
     @Operation(summary = "Create new category")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CategoryResponse> createCategory(@Valid @ModelAttribute CategoryRequest request) {
         return ResponseEntity.ok(categoryService.createCategory(request));
     }
 
     @Operation(summary = "Update existing category")
-    @PatchMapping("{id}")
+    @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @Valid @ModelAttribute CategoryRequest request) {
         return ResponseEntity.ok(categoryService.updateCategory(request, id));
     }

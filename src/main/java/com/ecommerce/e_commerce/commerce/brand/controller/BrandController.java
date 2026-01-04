@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,13 +33,13 @@ public class BrandController {
     }
 
     @Operation(summary = "Create new brand")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BrandResponse> createBrand(@Valid @ModelAttribute BrandRequest request) {
         return ResponseEntity.ok(brandService.createBrand(request));
     }
 
     @Operation(summary = "Update existing brand")
-    @PatchMapping("{id}")
+    @PatchMapping(value = "{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BrandResponse> updateBrand(@PathVariable long id,
                                                      @Valid @ModelAttribute BrandRequest request) {
         return ResponseEntity.ok(brandService.updateBrand(id, request));
