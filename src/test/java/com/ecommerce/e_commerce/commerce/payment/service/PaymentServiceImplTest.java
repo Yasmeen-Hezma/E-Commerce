@@ -11,6 +11,8 @@ import com.ecommerce.e_commerce.commerce.payment.enums.PaymentMethod;
 import com.ecommerce.e_commerce.commerce.payment.enums.PaymentStatus;
 import com.ecommerce.e_commerce.commerce.payment.model.PaymentTransaction;
 import com.ecommerce.e_commerce.commerce.payment.repository.PaymentTransactionRepository;
+import com.ecommerce.e_commerce.commerce.payment.validation.PaymentOrderValidationChain;
+import com.ecommerce.e_commerce.commerce.payment.validation.PaymentOrderValidator;
 import com.ecommerce.e_commerce.common.exception.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,10 @@ class PaymentServiceImplTest {
     private OrderMapper orderMapper;
     @Mock
     private OrderService orderService;
-
+    @Mock
+    private PaymentOrderValidationChain paymentOrderValidationChain;
+    @Mock
+    private PaymentOrderValidator paymentOrderValidator;
     @InjectMocks
     private PaymentServiceImpl paymentService;
 
@@ -76,11 +81,16 @@ class PaymentServiceImplTest {
         paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
         order.setPaymentTransaction(paymentTransaction);
         when(orderService.getOrderById(1L)).thenReturn(order);
+        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
+        doThrow(new PaymentAlreadyCompletedException(ORDER_ALREADY_COMPLETED))
+                .when(paymentOrderValidator)
+                .validate(any(Order.class));
         // Act & Assert
         assertThatThrownBy(() -> paymentService.createPaypalPayment(1L))
                 .isInstanceOf(PaymentAlreadyCompletedException.class)
                 .hasMessageContaining(ORDER_ALREADY_COMPLETED);
         verify(orderService).getOrderById(1L);
+        verify(paymentOrderValidationChain).build();
         verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
     }
 
@@ -89,11 +99,16 @@ class PaymentServiceImplTest {
         // Arrange
         order.setOrderTotal(BigDecimal.ZERO);
         when(orderService.getOrderById(1L)).thenReturn(order);
+        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
+        doThrow(new InvalidOrderTotalException(INVALID_ORDER_TOTAL))
+                .when(paymentOrderValidator)
+                .validate(any(Order.class));
         // Act & Assert
         assertThatThrownBy(() -> paymentService.createPaypalPayment(1L))
                 .isInstanceOf(InvalidOrderTotalException.class)
                 .hasMessageContaining(INVALID_ORDER_TOTAL);
         verify(orderService).getOrderById(1L);
+        verify(paymentOrderValidationChain).build();
         verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
     }
 
@@ -102,11 +117,16 @@ class PaymentServiceImplTest {
         // Arrange
         order.setStatus(OrderStatus.CONFIRMED);
         when(orderService.getOrderById(1L)).thenReturn(order);
+        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
+        doThrow(new InvalidOrderStatusException(INVALID_ORDER_STATUS))
+                .when(paymentOrderValidator)
+                .validate(any(Order.class));
         // Act & Assert
         assertThatThrownBy(() -> paymentService.createPaypalPayment(1L))
                 .isInstanceOf(InvalidOrderStatusException.class)
                 .hasMessageContaining(INVALID_ORDER_STATUS);
         verify(orderService).getOrderById(1L);
+        verify(paymentOrderValidationChain).build();
         verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
     }
 
@@ -214,6 +234,7 @@ class PaymentServiceImplTest {
                 .id(1L)
                 .build();
         when(orderService.getOrderById(1L)).thenReturn(order);
+        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
         when(paymentTransactionRepository.save(any(PaymentTransaction.class))).thenReturn(paymentTransaction);
         when(orderRepository.save(any(Order.class))).thenReturn(order);
         when(orderMapper.toOrderResponse(order)).thenReturn(orderResponse);
@@ -234,11 +255,16 @@ class PaymentServiceImplTest {
         paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
         order.setPaymentTransaction(paymentTransaction);
         when(orderService.getOrderById(1L)).thenReturn(order);
+        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
+        doThrow(new PaymentAlreadyCompletedException(ORDER_ALREADY_COMPLETED))
+                .when(paymentOrderValidator)
+                .validate(any(Order.class));
         // Assert & Act
         assertThatThrownBy(() -> paymentService.createCODPayment(1L))
                 .isInstanceOf(PaymentAlreadyCompletedException.class)
                 .hasMessageContaining(ORDER_ALREADY_COMPLETED);
         verify(orderService).getOrderById(1L);
+        verify(paymentOrderValidationChain).build();
         verify(orderRepository, never()).save(any(Order.class));
     }
 
@@ -247,11 +273,16 @@ class PaymentServiceImplTest {
         // Arrange
         order.setOrderTotal(BigDecimal.ZERO);
         when(orderService.getOrderById(1L)).thenReturn(order);
+        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
+        doThrow(new InvalidOrderTotalException(INVALID_ORDER_TOTAL))
+                .when(paymentOrderValidator)
+                .validate(any(Order.class));
         // Assert & Act
         assertThatThrownBy(() -> paymentService.createCODPayment(1L))
                 .isInstanceOf(InvalidOrderTotalException.class)
                 .hasMessageContaining(INVALID_ORDER_TOTAL);
         verify(orderService).getOrderById(1L);
+        verify(paymentOrderValidationChain).build();
         verify(orderRepository, never()).save(any(Order.class));
     }
 
@@ -260,11 +291,16 @@ class PaymentServiceImplTest {
         // Arrange
         order.setStatus(OrderStatus.CONFIRMED);
         when(orderService.getOrderById(1L)).thenReturn(order);
+        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
+        doThrow(new InvalidOrderStatusException(INVALID_ORDER_STATUS))
+                .when(paymentOrderValidator)
+                .validate(any(Order.class));
         // Assert & Act
         assertThatThrownBy(() -> paymentService.createCODPayment(1L))
                 .isInstanceOf(InvalidOrderStatusException.class)
                 .hasMessageContaining(INVALID_ORDER_STATUS);
         verify(orderService).getOrderById(1L);
+        verify(paymentOrderValidationChain).build();
         verify(orderRepository, never()).save(any(Order.class));
     }
 

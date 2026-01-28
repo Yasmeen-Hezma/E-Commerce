@@ -14,6 +14,7 @@ import com.ecommerce.e_commerce.commerce.payment.enums.PaymentMethod;
 import com.ecommerce.e_commerce.commerce.payment.enums.PaymentStatus;
 import com.ecommerce.e_commerce.commerce.payment.model.PaymentTransaction;
 import com.ecommerce.e_commerce.commerce.payment.repository.PaymentTransactionRepository;
+import com.ecommerce.e_commerce.commerce.payment.validation.PaymentOrderValidationChain;
 import com.ecommerce.e_commerce.common.exception.*;
 import com.paypal.core.PayPalEnvironment;
 import com.paypal.core.PayPalHttpClient;
@@ -48,6 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final OrderMapper orderMapper;
     private final OrderService orderService;
+    private final PaymentOrderValidationChain paymentOrderValidationChain;
 
     @Value("${paypal.client-id}")
     private String paypalClientId;
@@ -62,7 +64,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaypalOrderResponse createPaypalPayment(Long orderId) {
         // 1) Get and validate order
         Order order = orderService.getOrderById(orderId);
-        validateOrderForPayment(order);
+        paymentOrderValidationChain.build().validate(order);
         // 2) Create PayPal client
         PayPalHttpClient client = createPaypalClient();
         // 3) Build PayPal order request
@@ -155,7 +157,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public OrderResponse createCODPayment(Long orderId) {
         Order order = orderService.getOrderById(orderId);
-        validateOrderForPayment(order);
+        paymentOrderValidationChain.build().validate(order);
 
         PaymentTransaction paymentTransaction = createPaymentTransactionCOD(order);
         paymentTransactionRepository.save(paymentTransaction);
@@ -245,19 +247,6 @@ public class PaymentServiceImpl implements PaymentService {
                         .value(order.getOrderTotal().toString())));
         orderRequest.purchaseUnits(purchaseUnits);
         return orderRequest;
-    }
-
-    private void validateOrderForPayment(Order order) {
-        if (order.getPaymentTransaction() != null && PaymentStatus.COMPLETED.equals(order.getPaymentTransaction().getPaymentStatus())) {
-            throw new PaymentAlreadyCompletedException(ORDER_ALREADY_COMPLETED);
-        }
-        if (order.getOrderTotal() == null || order.getOrderTotal().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidOrderTotalException(INVALID_ORDER_TOTAL);
-        }
-        if (!OrderStatus.PENDING.equals(order.getStatus())
-                && !OrderStatus.PAYMENT_FAILED.equals(order.getStatus())) {
-            throw new InvalidOrderStatusException(INVALID_ORDER_STATUS);
-        }
     }
 
     private PayPalHttpClient createPaypalClient() {
