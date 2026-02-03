@@ -4,8 +4,8 @@ import com.ecommerce.e_commerce.commerce.order.dto.OrderResponse;
 import com.ecommerce.e_commerce.commerce.order.dto.ShippingAddressRequest;
 import com.ecommerce.e_commerce.commerce.order.service.OrderService;
 import com.ecommerce.e_commerce.commerce.payment.dto.PaymentStatusResponse;
-import com.ecommerce.e_commerce.commerce.payment.dto.PaypalCaptureResponse;
-import com.ecommerce.e_commerce.commerce.payment.dto.PaypalOrderResponse;
+import com.ecommerce.e_commerce.commerce.payment.dto.OnlineCaptureResponse;
+import com.ecommerce.e_commerce.commerce.payment.dto.OnlinePaymentResponse;
 import com.ecommerce.e_commerce.commerce.payment.service.PaymentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,15 +41,15 @@ public class OrderController {
 
     @Operation(summary = "Create PayPal payment")
     @PostMapping("{orderId}/payment/paypal/create")
-    public ResponseEntity<PaypalOrderResponse> createPayPalPayment(@PathVariable Long orderId) {
-        PaypalOrderResponse response = paymentService.createPaypalPayment(orderId);
+    public ResponseEntity<OnlinePaymentResponse> createPayPalPayment(@PathVariable Long orderId) {
+        OnlinePaymentResponse response = paymentService.createPaypalPayment(orderId);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Capture PayPal payment")
     @PostMapping("{orderId}/payment/paypal/capture")
-    public ResponseEntity<PaypalCaptureResponse> capturePayPalPayment(@PathVariable Long orderId, @RequestParam String token) {
-        PaypalCaptureResponse response = paymentService.capturePayPalPayment(orderId, token);
+    public ResponseEntity<OnlineCaptureResponse> capturePayPalPayment(@PathVariable Long orderId, @RequestParam String token) {
+        OnlineCaptureResponse response = paymentService.capturePayPalPayment(orderId, token);
         return ResponseEntity.ok(response);
     }
 

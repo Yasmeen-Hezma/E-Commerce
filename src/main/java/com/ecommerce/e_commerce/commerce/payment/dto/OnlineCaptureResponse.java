@@ -9,11 +9,10 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaypalOrderResponse {
-    private String paypalOrderId;
+public class OnlineCaptureResponse {
     private long orderId;
+    private String externalPaymentId;
+    private String captureId;
     private String status;
-    private String approvalUrl;
     private BigDecimal amount;
-    private String currency;
 }

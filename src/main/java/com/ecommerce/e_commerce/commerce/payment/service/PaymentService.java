@@ -2,13 +2,13 @@ package com.ecommerce.e_commerce.commerce.payment.service;
 
 import com.ecommerce.e_commerce.commerce.order.dto.OrderResponse;
 import com.ecommerce.e_commerce.commerce.payment.dto.PaymentStatusResponse;
-import com.ecommerce.e_commerce.commerce.payment.dto.PaypalCaptureResponse;
-import com.ecommerce.e_commerce.commerce.payment.dto.PaypalOrderResponse;
+import com.ecommerce.e_commerce.commerce.payment.dto.OnlineCaptureResponse;
+import com.ecommerce.e_commerce.commerce.payment.dto.OnlinePaymentResponse;
 
 public interface PaymentService {
-    PaypalOrderResponse createPaypalPayment(Long orderId);
+    OnlinePaymentResponse createPaypalPayment(Long orderId);
 
-    PaypalCaptureResponse capturePayPalPayment(Long orderId, String paypalOrderId);
+    OnlineCaptureResponse capturePayPalPayment(Long orderId, String paypalOrderId);
 
     void handlePaymentFailure(Long orderId);
 

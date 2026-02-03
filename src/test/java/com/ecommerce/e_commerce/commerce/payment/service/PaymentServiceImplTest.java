@@ -2,31 +2,30 @@ package com.ecommerce.e_commerce.commerce.payment.service;
 
 import com.ecommerce.e_commerce.commerce.order.dto.OrderResponse;
 import com.ecommerce.e_commerce.commerce.order.enums.OrderStatus;
-import com.ecommerce.e_commerce.commerce.order.mapper.OrderMapper;
 import com.ecommerce.e_commerce.commerce.order.model.Order;
 import com.ecommerce.e_commerce.commerce.order.repository.OrderRepository;
 import com.ecommerce.e_commerce.commerce.order.service.OrderService;
+import com.ecommerce.e_commerce.commerce.payment.dto.OnlineCaptureResponse;
+import com.ecommerce.e_commerce.commerce.payment.dto.OnlinePaymentResponse;
 import com.ecommerce.e_commerce.commerce.payment.dto.PaymentStatusResponse;
 import com.ecommerce.e_commerce.commerce.payment.enums.PaymentMethod;
 import com.ecommerce.e_commerce.commerce.payment.enums.PaymentStatus;
+import com.ecommerce.e_commerce.commerce.payment.factory.PaymentStrategyFactory;
 import com.ecommerce.e_commerce.commerce.payment.model.PaymentTransaction;
 import com.ecommerce.e_commerce.commerce.payment.repository.PaymentTransactionRepository;
-import com.ecommerce.e_commerce.commerce.payment.validation.PaymentOrderValidationChain;
-import com.ecommerce.e_commerce.commerce.payment.validation.PaymentOrderValidator;
-import com.ecommerce.e_commerce.common.exception.*;
+import com.ecommerce.e_commerce.commerce.payment.strategy.offline.OfflinePaymentStrategy;
+import com.ecommerce.e_commerce.commerce.payment.strategy.online.OnlinePaymentStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.ecommerce.e_commerce.common.utils.Constants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -37,13 +36,13 @@ class PaymentServiceImplTest {
     @Mock
     private PaymentTransactionRepository paymentTransactionRepository;
     @Mock
-    private OrderMapper orderMapper;
-    @Mock
     private OrderService orderService;
     @Mock
-    private PaymentOrderValidationChain paymentOrderValidationChain;
+    private PaymentStrategyFactory paymentStrategyFactory;
     @Mock
-    private PaymentOrderValidator paymentOrderValidator;
+    private OnlinePaymentStrategy onlinePaymentStrategy;
+    @Mock
+    private OfflinePaymentStrategy offlinePaymentStrategy;
     @InjectMocks
     private PaymentServiceImpl paymentService;
 
@@ -52,11 +51,6 @@ class PaymentServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(paymentService, "paypalClientId", "test-client-id");
-        ReflectionTestUtils.setField(paymentService, "paypalClientSecret", "test-client-secret");
-        ReflectionTestUtils.setField(paymentService, "paypalMode", "sandbox");
-        ReflectionTestUtils.setField(paymentService, "baseUrl", "http://localhost:8080/");
-
         order = Order
                 .builder()
                 .orderId(1L)
@@ -76,88 +70,74 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void createPaypalPayment_ShouldThrowException_WhenOrderAlreadyCompleted() {
+    void createPayPalPayment_ShouldDelegateToOnlineStrategy_WhenValidRequest() {
         // Arrange
-        paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
-        order.setPaymentTransaction(paymentTransaction);
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
-        doThrow(new PaymentAlreadyCompletedException(ORDER_ALREADY_COMPLETED))
-                .when(paymentOrderValidator)
-                .validate(any(Order.class));
-        // Act & Assert
-        assertThatThrownBy(() -> paymentService.createPaypalPayment(1L))
-                .isInstanceOf(PaymentAlreadyCompletedException.class)
-                .hasMessageContaining(ORDER_ALREADY_COMPLETED);
-        verify(orderService).getOrderById(1L);
-        verify(paymentOrderValidationChain).build();
-        verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
+        OnlinePaymentResponse expectedResponse = OnlinePaymentResponse
+                .builder()
+                .orderId(1L)
+                .externalPaymentId("PAYPAL-ORDER-123")
+                .status("CREATED")
+                .approvalUrl("https://sandbox.paypal.com/approve/PAYPAL-ORDER-123")
+                .amount(BigDecimal.valueOf(100.00))
+                .currency("USD")
+                .build();
+        when(paymentStrategyFactory.getOnlineStrategy(PaymentMethod.PAYPAL)).thenReturn(onlinePaymentStrategy);
+        when(onlinePaymentStrategy.createPayment(1L)).thenReturn(expectedResponse);
+        // Act
+        OnlinePaymentResponse result = paymentService.createPaypalPayment(1L);
+        // Assert
+        verify(paymentStrategyFactory).getOnlineStrategy(PaymentMethod.PAYPAL);
+        verify(onlinePaymentStrategy).createPayment(1L);
+        assertThat(result).isEqualTo(expectedResponse);
     }
 
     @Test
-    void createPaypalPayment_ShouldThrowException_WhenInvalidOrderTotal() {
+    void capturePayPalPayment_ShouldDelegateToOnlineStrategy_WhenValidRequest() {
         // Arrange
-        order.setOrderTotal(BigDecimal.ZERO);
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
-        doThrow(new InvalidOrderTotalException(INVALID_ORDER_TOTAL))
-                .when(paymentOrderValidator)
-                .validate(any(Order.class));
-        // Act & Assert
-        assertThatThrownBy(() -> paymentService.createPaypalPayment(1L))
-                .isInstanceOf(InvalidOrderTotalException.class)
-                .hasMessageContaining(INVALID_ORDER_TOTAL);
-        verify(orderService).getOrderById(1L);
-        verify(paymentOrderValidationChain).build();
-        verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
+        OnlineCaptureResponse expectedResponse = OnlineCaptureResponse
+                .builder()
+                .orderId(1L)
+                .externalPaymentId("PAYPAL-ORDER-123")
+                .captureId("CAPTURE-456")
+                .status("COMPLETED")
+                .amount(BigDecimal.valueOf(100.00))
+                .build();
+        when(paymentStrategyFactory.getOnlineStrategy(PaymentMethod.PAYPAL)).thenReturn(onlinePaymentStrategy);
+        when(onlinePaymentStrategy.capturePayment(1L, "PAYPAL-ORDER-123")).thenReturn(expectedResponse);
+        // Act
+        OnlineCaptureResponse result = paymentService.capturePayPalPayment(1L, "PAYPAL-ORDER-123");
+        // Assert
+        verify(paymentStrategyFactory).getOnlineStrategy(PaymentMethod.PAYPAL);
+        verify(onlinePaymentStrategy).capturePayment(1L, "PAYPAL-ORDER-123");
+        assertThat(result).isEqualTo(expectedResponse);
     }
 
     @Test
-    void createPaypalPayment_ShouldThrowException_WhenInvalidOrderStatus() {
+    void createCODPayment_ShouldDelegateToOfflineStrategy_WhenValidRequest() {
         // Arrange
-        order.setStatus(OrderStatus.CONFIRMED);
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
-        doThrow(new InvalidOrderStatusException(INVALID_ORDER_STATUS))
-                .when(paymentOrderValidator)
-                .validate(any(Order.class));
-        // Act & Assert
-        assertThatThrownBy(() -> paymentService.createPaypalPayment(1L))
-                .isInstanceOf(InvalidOrderStatusException.class)
-                .hasMessageContaining(INVALID_ORDER_STATUS);
-        verify(orderService).getOrderById(1L);
-        verify(paymentOrderValidationChain).build();
-        verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
+        OrderResponse expectedResponse = OrderResponse
+                .builder()
+                .id(1L)
+                .build();
+        when(paymentStrategyFactory.getOfflineStrategy(PaymentMethod.COD)).thenReturn(offlinePaymentStrategy);
+        when(offlinePaymentStrategy.createPayment(1L)).thenReturn(expectedResponse);
+        // Act
+        OrderResponse result = paymentService.createCODPayment(1L);
+        // Assert
+        verify(paymentStrategyFactory).getOfflineStrategy(PaymentMethod.COD);
+        verify(offlinePaymentStrategy).createPayment(1L);
+        assertThat(result).isEqualTo(expectedResponse);
     }
 
     @Test
-    void capturePayPalPayment_ShouldThrowException_WhenPayPalOrderMisMatch() {
+    void completeCODPayment_ShouldDelegateToOfflineStrategy_WhenValidRequest() {
         // Arrange
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentTransactionRepository.findByOrder(order)).thenReturn(Optional.of(paymentTransaction));
-        // Act & Assert
-        assertThatThrownBy(() -> paymentService.capturePayPalPayment(1L, "WRONG-ORDER-ID"))
-                .isInstanceOf(PayPalOrderMismatchException.class)
-                .hasMessageContaining(PAYPAL_ORDER_ID_MISMATCH);
-        verify(orderService).getOrderById(1L);
-        verify(paymentTransactionRepository).findByOrder(order);
-        verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
-        verify(orderRepository, never()).save(any(Order.class));
-    }
-
-    @Test
-    void capturePayPalPayment_ShouldThrowException_WhenPaymentNotFound() {
-        // Arrange
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentTransactionRepository.findByOrder(order)).thenReturn(Optional.empty());
-        // Act & Assert
-        assertThatThrownBy(() -> paymentService.capturePayPalPayment(1L, "PAYPAL-ORDER-123"))
-                .isInstanceOf(ItemNotFoundException.class)
-                .hasMessageContaining(PAYMENT_NOT_FOUND);
-        verify(orderService).getOrderById(1L);
-        verify(paymentTransactionRepository).findByOrder(order);
-        verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
-        verify(orderRepository, never()).save(any(Order.class));
+        when(paymentStrategyFactory.getOfflineStrategy(PaymentMethod.COD)).thenReturn(offlinePaymentStrategy);
+        // Act
+        paymentService.completeCODPayment(1L);
+        // Assert
+        verify(paymentStrategyFactory).getOfflineStrategy(PaymentMethod.COD);
+        verify(offlinePaymentStrategy).completePayment(1L);
     }
 
     @Test
@@ -224,125 +204,5 @@ class PaymentServiceImplTest {
         assertThat(result.getOrderStatus()).isEqualTo(OrderStatus.PENDING.toString());
         assertThat(result.getPaymentStatus()).isNull();
         assertThat(result.getPaymentMethod()).isNull();
-    }
-
-    @Test
-    void createCODPayment_ShouldCreateCODPayment_WhenValidRequest() {
-        // Arrange
-        OrderResponse orderResponse = OrderResponse
-                .builder()
-                .id(1L)
-                .build();
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
-        when(paymentTransactionRepository.save(any(PaymentTransaction.class))).thenReturn(paymentTransaction);
-        when(orderRepository.save(any(Order.class))).thenReturn(order);
-        when(orderMapper.toOrderResponse(order)).thenReturn(orderResponse);
-        // Act
-        OrderResponse result = paymentService.createCODPayment(1L);
-        // Assert
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
-        verify(orderService).getOrderById(1L);
-        verify(paymentTransactionRepository).save(argThat(pt -> pt.getPaymentStatus() == PaymentStatus.PENDING && pt.getPaymentMethod() == PaymentMethod.COD));
-        verify(orderRepository).save(argThat(o -> o.getStatus() == OrderStatus.CONFIRMED));
-        verify(orderMapper).toOrderResponse(order);
-    }
-
-    @Test
-    void createCODPayment_ShouldThrowException_WhenOrderAlreadyCompleted() {
-        // Arrange
-        paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
-        order.setPaymentTransaction(paymentTransaction);
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
-        doThrow(new PaymentAlreadyCompletedException(ORDER_ALREADY_COMPLETED))
-                .when(paymentOrderValidator)
-                .validate(any(Order.class));
-        // Assert & Act
-        assertThatThrownBy(() -> paymentService.createCODPayment(1L))
-                .isInstanceOf(PaymentAlreadyCompletedException.class)
-                .hasMessageContaining(ORDER_ALREADY_COMPLETED);
-        verify(orderService).getOrderById(1L);
-        verify(paymentOrderValidationChain).build();
-        verify(orderRepository, never()).save(any(Order.class));
-    }
-
-    @Test
-    void createCODPayment_ShouldThrowException_WhenInValidOrderTotal() {
-        // Arrange
-        order.setOrderTotal(BigDecimal.ZERO);
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
-        doThrow(new InvalidOrderTotalException(INVALID_ORDER_TOTAL))
-                .when(paymentOrderValidator)
-                .validate(any(Order.class));
-        // Assert & Act
-        assertThatThrownBy(() -> paymentService.createCODPayment(1L))
-                .isInstanceOf(InvalidOrderTotalException.class)
-                .hasMessageContaining(INVALID_ORDER_TOTAL);
-        verify(orderService).getOrderById(1L);
-        verify(paymentOrderValidationChain).build();
-        verify(orderRepository, never()).save(any(Order.class));
-    }
-
-    @Test
-    void createCODPayment_ShouldThrowException_WhenInValidOrderStatus() {
-        // Arrange
-        order.setStatus(OrderStatus.CONFIRMED);
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentOrderValidationChain.build()).thenReturn(paymentOrderValidator);
-        doThrow(new InvalidOrderStatusException(INVALID_ORDER_STATUS))
-                .when(paymentOrderValidator)
-                .validate(any(Order.class));
-        // Assert & Act
-        assertThatThrownBy(() -> paymentService.createCODPayment(1L))
-                .isInstanceOf(InvalidOrderStatusException.class)
-                .hasMessageContaining(INVALID_ORDER_STATUS);
-        verify(orderService).getOrderById(1L);
-        verify(paymentOrderValidationChain).build();
-        verify(orderRepository, never()).save(any(Order.class));
-    }
-
-    @Test
-    void completeCODPayment_ShouldCompleteCODPayment_WhenValidRequest() {
-        // Arrange
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentTransactionRepository.findByOrder(order)).thenReturn(Optional.of(paymentTransaction));
-        // Act
-        paymentService.completeCODPayment(1L);
-        // Assert
-        verify(orderService).getOrderById(1L);
-        verify(paymentTransactionRepository).findByOrder(order);
-        verify(paymentTransactionRepository).save(argThat(pt -> paymentTransaction.getPaymentStatus() == PaymentStatus.COMPLETED));
-    }
-
-    @Test
-    void completeCODPayment_ShouldThrowException_WhenOrderAlreadyCompleted() {
-        // Arrange
-        paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentTransactionRepository.findByOrder(order)).thenReturn(Optional.of(paymentTransaction));
-        // Act & Assert
-        assertThatThrownBy(() -> paymentService.completeCODPayment(1L))
-                .isInstanceOf(PaymentAlreadyCompletedException.class)
-                .hasMessageContaining(ORDER_ALREADY_COMPLETED);
-        verify(orderService).getOrderById(1L);
-        verify(paymentTransactionRepository).findByOrder(order);
-        verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
-    }
-
-    @Test
-    void completeCODPayment_ShouldThrowException_WhenTransactionNotFound() {
-        // Arrange
-        when(orderService.getOrderById(1L)).thenReturn(order);
-        when(paymentTransactionRepository.findByOrder(order)).thenReturn(Optional.empty());
-        // Act & Assert
-        assertThatThrownBy(() -> paymentService.completeCODPayment(1L))
-                .isInstanceOf(ItemNotFoundException.class)
-                .hasMessageContaining(PAYMENT_NOT_FOUND);
-        verify(orderService).getOrderById(1L);
-        verify(paymentTransactionRepository).findByOrder(order);
-        verify(paymentTransactionRepository, never()).save(any(PaymentTransaction.class));
     }
 }

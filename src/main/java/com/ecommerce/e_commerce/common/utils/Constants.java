@@ -52,6 +52,7 @@ public class Constants {
     public static final String PAYPAL_ORDER_ID_MISMATCH = "PayPal order ID mismatch";
     public static final String NO_APPROVAL_URL_FOUND_IN_PAYPAL_RESPONSE = "No approval URL found in PayPal response";
     public static final String PAYPAL_CAPTURE_WAS_NOT_COMPLETED = "PayPal capture was not completed";
+    public static final String PAYMENT_SUPPORT_IS_MISSING_FOR_THIS_METHOD = "Payment support is missing for this method";
 
     // OTP / Password Reset
     public static final String OTP_EXPIRED = "OTP expired";

@@ -119,6 +119,12 @@ public class RestExceptionHandler {
         return handleException(e.getMessage(), HttpStatus.CONFLICT, null);
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UnsupportedPaymentMethodException.class)
+    public ResponseEntity<ErrorResponse> UnsupportedPaymentMethodException(UnsupportedPaymentMethodException e) {
+        return handleException(e.getMessage(), HttpStatus.CONFLICT, null);
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> genericException(Exception e) {
