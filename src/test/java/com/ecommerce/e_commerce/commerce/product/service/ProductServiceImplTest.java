@@ -449,5 +449,17 @@ class ProductServiceImplTest {
         assertThatThrownBy(() -> productService.checkStockAvailability(List.of(cartItem)))
                 .isInstanceOf(InsufficientStockException.class);
     }
+
+    @Test
+    void decreaseStock_ShouldDecreaseQuantity_WhenValidRequest() {
+        // Arrange
+        when(productRepository.findByProductIdAndDeletedFalse(1L)).thenReturn(Optional.of(product));
+        // Act
+        productService.decreaseStock(1L, 5);
+        // Assert
+        verify(productRepository).findByProductIdAndDeletedFalse(1L);
+        verify(productRepository).save(product);
+        assertThat(product.getQuantity()).isEqualTo(45);
+    }
 }
 

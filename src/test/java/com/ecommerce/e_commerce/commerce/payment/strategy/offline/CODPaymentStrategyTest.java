@@ -2,6 +2,9 @@ package com.ecommerce.e_commerce.commerce.payment.strategy.offline;
 
 import com.ecommerce.e_commerce.commerce.order.dto.OrderResponse;
 import com.ecommerce.e_commerce.commerce.order.enums.OrderStatus;
+import com.ecommerce.e_commerce.commerce.order.event.OrderCompletedEvent;
+import com.ecommerce.e_commerce.commerce.order.event.listener.InventoryUpdateEventListener;
+import com.ecommerce.e_commerce.commerce.order.event.listener.OrderConfirmationEmailEventListener;
 import com.ecommerce.e_commerce.commerce.order.mapper.OrderMapper;
 import com.ecommerce.e_commerce.commerce.order.model.Order;
 import com.ecommerce.e_commerce.commerce.order.repository.OrderRepository;
@@ -16,13 +19,16 @@ import com.ecommerce.e_commerce.common.exception.InvalidOrderStatusException;
 import com.ecommerce.e_commerce.common.exception.InvalidOrderTotalException;
 import com.ecommerce.e_commerce.common.exception.ItemNotFoundException;
 import com.ecommerce.e_commerce.common.exception.PaymentAlreadyCompletedException;
+import com.ecommerce.e_commerce.security.auth.model.AuthUser;
+import com.ecommerce.e_commerce.user.profile.model.User;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -49,6 +55,8 @@ class CODPaymentStrategyTest {
     private PaymentOrderValidationChain paymentOrderValidationChain;
     @Mock
     private PaymentOrderValidator paymentOrderValidator;
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
     @InjectMocks
     private CODPaymentStrategy CODPaymentStrategy;
 
@@ -57,12 +65,6 @@ class CODPaymentStrategyTest {
 
     @BeforeEach
     void setUp() {
-        order = Order
-                .builder()
-                .orderId(1L)
-                .orderTotal(BigDecimal.valueOf(100.00))
-                .status(OrderStatus.PENDING)
-                .build();
         paymentTransaction = PaymentTransaction
                 .builder()
                 .paymentId(1L)
@@ -72,6 +74,25 @@ class CODPaymentStrategyTest {
                 .paypalOrderId("PAYPAL-ORDER-123")
                 .amount(BigDecimal.valueOf(100.00))
                 .currency("USD")
+                .build();
+        User user = User.builder()
+                .userId(1L)
+                .firstName("Yousef")
+                .lastName("Mahmoud")
+                .build();
+        AuthUser authUser = AuthUser
+                .builder()
+                .userId(1L)
+                .user(user)
+                .email("Yousef@email.com")
+                .build();
+        user.setAuthUser(authUser);
+        order = Order
+                .builder()
+                .orderId(1L)
+                .orderTotal(BigDecimal.valueOf(100.00))
+                .status(OrderStatus.PENDING)
+                .user(user)
                 .build();
     }
 
@@ -154,7 +175,7 @@ class CODPaymentStrategyTest {
     }
 
     @Test
-    void completeCODPayment_ShouldCompleteCODPayment_WhenValidRequest() {
+    void completeCODPayment_ShouldCompleteCODPayment_WhenValidRequest() throws MessagingException {
         // Arrange
         when(orderService.getOrderById(1L)).thenReturn(order);
         when(paymentTransactionRepository.findByOrder(order)).thenReturn(Optional.of(paymentTransaction));
@@ -164,6 +185,7 @@ class CODPaymentStrategyTest {
         verify(orderService).getOrderById(1L);
         verify(paymentTransactionRepository).findByOrder(order);
         verify(paymentTransactionRepository).save(argThat(pt -> paymentTransaction.getPaymentStatus() == PaymentStatus.COMPLETED));
+        verify(applicationEventPublisher).publishEvent(any(OrderCompletedEvent.class));
     }
 
     @Test

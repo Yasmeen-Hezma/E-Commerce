@@ -1,6 +1,7 @@
 package com.ecommerce.e_commerce.commerce.payment.strategy.online;
 
 import com.ecommerce.e_commerce.commerce.order.enums.OrderStatus;
+import com.ecommerce.e_commerce.commerce.order.event.OrderCompletedEvent;
 import com.ecommerce.e_commerce.commerce.order.model.Order;
 import com.ecommerce.e_commerce.commerce.order.repository.OrderRepository;
 import com.ecommerce.e_commerce.commerce.order.service.OrderService;
@@ -21,6 +22,7 @@ import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -50,6 +52,7 @@ public class PaypalPaymentStrategy implements OnlinePaymentStrategy {
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final OrderService orderService;
     private final PaymentOrderValidationChain paymentOrderValidationChain;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Value("${paypal.client-id}")
     private String paypalClientId;
@@ -112,6 +115,8 @@ public class PaypalPaymentStrategy implements OnlinePaymentStrategy {
 
                 order.setStatus(OrderStatus.CONFIRMED);
                 orderRepository.save(order);
+                applicationEventPublisher
+                        .publishEvent(new OrderCompletedEvent(orderId, order.getOrderTotal(), order.getUser().getAuthUser().getEmail()));
                 return OnlineCaptureResponse
                         .builder()
                         .orderId(orderId)

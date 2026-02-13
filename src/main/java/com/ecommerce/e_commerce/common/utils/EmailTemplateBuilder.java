@@ -18,4 +18,19 @@ public class EmailTemplateBuilder {
                 — E-Commerce Platform
                 """.formatted(title, message, otp);
     }
+
+    public String buildOrderConfirmationEmail(Long orderId, String totalAmount) {
+        return """
+                Order Confirmation
+
+                Your order has been successfully placed.
+
+                Order ID: %s
+                Total Amount: %s
+                -------------------------
+                We will notify you once your order is shipped.
+
+                — E-Commerce Platform
+                """.formatted(orderId, totalAmount);
+    }
 }

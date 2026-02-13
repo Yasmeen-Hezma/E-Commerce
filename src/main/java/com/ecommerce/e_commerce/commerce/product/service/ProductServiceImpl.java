@@ -148,12 +148,25 @@ public class ProductServiceImpl implements ProductService {
     public void checkStockAvailability(List<CartItem> cartItems) {
         List<StockWarning> issues = new ArrayList<>();
         for (CartItem item : cartItems) {
-            Optional<StockWarning> warningOpt = checkStockAndWarn(item.getProduct(), item.getQuantity());
-            warningOpt.ifPresent(issues::add);
+            checkStockAndWarn(item.getProduct(), item.getQuantity())
+                    .ifPresent(issues::add);
         }
         if (!issues.isEmpty()) {
             throw new InsufficientStockException(issues);
         }
+    }
+
+    @Override
+    @Transactional
+    public void decreaseStock(Long productId, int quantity) {
+        Product product = getNonDeletedProductById(productId);
+        throwIfStockIssues(product, quantity);
+        int remaining = product.getQuantity() - quantity;
+        product.setQuantity(remaining);
+        if (remaining == 0) {
+            product.setStatus(ProductStatus.OUT_OF_STOCK);
+        }
+        productRepository.save(product);
     }
 
     private void checkDuplicateProduct(ProductRequest request) {
@@ -179,5 +192,12 @@ public class ProductServiceImpl implements ProductService {
         if (available == 0) return StockWarningType.OUT_OF_STOCK;
         if (available < requested) return StockWarningType.LIMITED_STOCK;
         return null;
+    }
+
+    private void throwIfStockIssues(Product product, int quantity) {
+        checkStockAndWarn(product, quantity)
+                .ifPresent(warning -> {
+                    throw new InsufficientStockException(List.of(warning));
+                });
     }
 }

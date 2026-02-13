@@ -29,4 +29,6 @@ public interface ProductService {
     Optional<StockWarning> checkStockAndWarn(Product product, int requested);
 
     void checkStockAvailability(List<CartItem> cartItems);
+
+    void decreaseStock(Long productId, int quantity);
 }

@@ -2,6 +2,7 @@ package com.ecommerce.e_commerce.commerce.payment.strategy.offline;
 
 import com.ecommerce.e_commerce.commerce.order.dto.OrderResponse;
 import com.ecommerce.e_commerce.commerce.order.enums.OrderStatus;
+import com.ecommerce.e_commerce.commerce.order.event.OrderCompletedEvent;
 import com.ecommerce.e_commerce.commerce.order.mapper.OrderMapper;
 import com.ecommerce.e_commerce.commerce.order.model.Order;
 import com.ecommerce.e_commerce.commerce.order.repository.OrderRepository;
@@ -14,6 +15,7 @@ import com.ecommerce.e_commerce.commerce.payment.validation.PaymentOrderValidati
 import com.ecommerce.e_commerce.common.exception.ItemNotFoundException;
 import com.ecommerce.e_commerce.common.exception.PaymentAlreadyCompletedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import static com.ecommerce.e_commerce.common.utils.Constants.ORDER_ALREADY_COMPLETED;
@@ -27,6 +29,7 @@ public class CODPaymentStrategy implements OfflinePaymentStrategy {
     private final OrderMapper orderMapper;
     private final OrderService orderService;
     private final PaymentOrderValidationChain paymentOrderValidationChain;
+    private final ApplicationEventPublisher applicationEventPublisher;
     public static final String USD = "USD";
 
     @Override
@@ -59,6 +62,8 @@ public class CODPaymentStrategy implements OfflinePaymentStrategy {
 
         paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
         paymentTransactionRepository.save(paymentTransaction);
+        applicationEventPublisher
+                .publishEvent(new OrderCompletedEvent(orderId, order.getOrderTotal(), order.getUser().getAuthUser().getEmail()));
     }
 
     private PaymentTransaction createPaymentTransactionCOD(Order order) {
